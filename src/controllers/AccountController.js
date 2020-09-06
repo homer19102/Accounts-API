@@ -16,7 +16,7 @@ class AccountController{
 
             let filterName = `${"@"}${name}`;
             
-            const accountExists = await Accounts.findOne( { name });
+            const accountExists = await Accounts.findOne( { cpf });
     
             if(accountExists === null){
                 const newAccount = await Accounts.create({
