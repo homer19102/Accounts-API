@@ -6,7 +6,7 @@ import { db } from './databaseConnect.js';
 import routes from './src/routes/index.js';
 
 dotenv.config();
-//add
+
 (async () =>{
     try{
         await db.mongoose.connect(db.url, {
