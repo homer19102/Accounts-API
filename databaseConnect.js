@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 const db = {};
 
 dotenv.config();
-//databse connection
+
 db.url = process.env.DBCONNECTION;
 db.mongoose = mongoose;
 db.accounts = accountsSchema(mongoose);
