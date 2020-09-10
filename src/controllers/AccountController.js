@@ -2,21 +2,31 @@ import { db } from '../../databaseConnect.js';
 
 const Accounts = db.accounts;
 class AccountController{
-    async getAccount(req, res){
-        const { cpf } = req.body;
+    async getAccount(req, res, next){
+        try{
+            const { cpf } = req.body;
 
-        const cpfExists = await Accounts.find({ cpf });
+            const cpfExists = await Accounts.find({ cpf });
+    
+            if(cpfExists.length === 0)
+                throw new Error("Usuário inexistente para o CPF " +  `${cpf}`);
 
-        return res.json(cpfExists);
+            return res.json(cpfExists);
+        }catch(error){
+            next(error);
+        }
     }
 
-    async createAccount(req,res){
+    async createAccount(req, res, next){
         try{
             const {name, senha, cpf , email} = req.body;
 
             let filterName = `${"@"}${name}`;
             
             const accountExists = await Accounts.findOne( { cpf });
+
+            if(accountExists !== null)
+                throw new Error("Usuário já existente para o CPF " +  `${cpf}`);
     
             if(accountExists === null){
                 const newAccount = await Accounts.create({
@@ -29,30 +39,48 @@ class AccountController{
                 return res.json(newAccount);
             }
         }catch(error){
-            return res.json(error);
+            next(error);
         }
     }
 
-    async delete(req,res){
-        const {cpf} = req.body;
+    async delete(req,res, next){
 
-        const cpfExists = await Accounts.findOne({cpf});
-        
-        if(cpfExists !== null){
-            await Accounts.findByIdAndRemove(cpfExists.id);
-            res.json("Usuário excluido com sucesso");
+        try{
+            const {cpf} = req.body;
+
+            const cpfExists = await Accounts.findOne({cpf});
+            
+            if(cpfExists === null)
+                throw new Error("Usuário inexistente para o CPF " +  `${cpf}`);
+    
+            if(cpfExists !== null){
+                await Accounts.findByIdAndRemove(cpfExists.id);
+                res.json("Usuário excluido com sucesso");
+            }
+        }catch(error){
+            next(error);
         }
+       
     }
 
-    async update(req,res){
-        const { cpf } = req.body;
-        const cpfExists = await Accounts.findOne({cpf});
+    async update(req, res, next){
+        try{
+            const { cpf } = req.body;
+            const cpfExists = await Accounts.findOne({cpf});
 
-        const data = await Accounts.findByIdAndUpdate(cpfExists.id, req.body,{
+            if(cpfExists === null)
+                throw new Error("Usuário inexistente para o CPF " +  `${cpf}`);
+
+            const data = await Accounts.findByIdAndUpdate(cpfExists.id, req.body,{
             new: true,
         });
 
-        res.json(data);
+        res.json(data); 
+
+        }catch(error){
+            next(error);
+        }
+        
     }
 }
 

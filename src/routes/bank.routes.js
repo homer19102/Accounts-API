@@ -12,5 +12,4 @@ accountsRouter.post('/NewUser/', AccountController.createAccount);
 accountsRouter.delete('/DeleteUser', AccountController.delete);
 accountsRouter.put('/UpdateUser', AccountController.update);
 
-
-export default accountsRouter;
+export {accountsRouter as accountsRouter};
