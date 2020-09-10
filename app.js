@@ -20,6 +20,7 @@ dotenv.config();
         console.log('Erro ao conectar no mongodb ' + error);
     }
 })();
+
 const app = express();
 
 app.use(express.json());

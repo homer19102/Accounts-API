@@ -19,7 +19,7 @@ class AccountController{
 
     async createAccount(req, res, next){
         try{
-            const {name, senha, cpf , email} = req.body;
+            const {name, senha, cpf , email, agencia, conta, saldo} = req.body;
 
             let filterName = `${"@"}${name}`;
             
@@ -34,7 +34,10 @@ class AccountController{
                     filterName,
                     senha,
                     cpf,
-                    email
+                    email,
+                    agencia,
+                    conta,
+                    saldo
                 });
                 return res.json(newAccount);
             }
