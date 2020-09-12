@@ -1,4 +1,5 @@
 import { db } from '../../databaseConnect.js';
+import ValidConta from '../utils/ValidConta.js';
 
 const Accounts = db.accounts;
 
@@ -7,8 +8,8 @@ class BalancerController{
         try{
 
             const {conta, contaDestino, valor} = req.body;
-            let contaInicial = await validaConta(conta);
-            let contaDestinoo = await validaConta(contaDestino);
+            let contaInicial = await ValidConta.validaConta(conta, next);
+            let contaDestinoo = await ValidConta.validaConta(contaDestino, next);
 
             contaInicial.saldo -= valor;
             if(contaInicial.saldo < 0){
@@ -29,18 +30,6 @@ class BalancerController{
             next(error);
         }
     }
-}
-
-const validaConta = async (conta, next) =>{
-        try{
-            conta = {
-                conta
-            };
-            conta = await Accounts.findOne(conta);
-            return conta;
-        }catch(error){
-            next(error);
-        }
 }
 
 export default new BalancerController();

@@ -20,6 +20,8 @@ const expensesRouter = Router();
 const goalsRouter = Router();
 
 //Accounts Router
+
+
 accountsRouter.get('/', AccountController.getAccount);
 accountsRouter.post('/NewUser/', AccountController.createAccount);
 accountsRouter.delete('/DeleteUser', AccountController.delete);
@@ -37,5 +39,6 @@ expensesRouter.put('/PutExpense', ExpensesController.PutExpense);
 
 //Goals Router
 goalsRouter.post('/NewGoal', GoalsController.PostGoal);
+goalsRouter.put('/TransferToGoal', GoalsController.PutTransferToGoal);
 
 export {accountsRouter as accountsRouter, balanceRouter as balanceRouter, expensesRouter as expensesRouter, goalsRouter as goalsRouter};

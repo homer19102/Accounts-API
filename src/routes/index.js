@@ -4,7 +4,7 @@ import { accountsRouter, balanceRouter, expensesRouter, goalsRouter } from './ba
 const { Router } = express;
 
 const routes = Router();
-
+ 
 routes.use('/accounts', accountsRouter);
 
 routes.use('/saldo', balanceRouter);

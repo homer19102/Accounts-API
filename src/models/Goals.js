@@ -15,6 +15,9 @@ export default(mongoose) => {
         valueGoal:{
             type: Number,
             required: true
+        },
+        currentGoalValue:{
+            type: Number
         }
     });
 
