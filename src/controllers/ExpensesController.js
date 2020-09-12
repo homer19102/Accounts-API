@@ -1,11 +1,47 @@
 import { db } from '../../databaseConnect.js';
+import ValidConta from '../utils/ValidConta.js';
 
 const expenses = db.expenses;
+const Accounts = db.accounts;
 
 class ExpensesController {
     async AddExpense(req, res, next){
         try{
             const { parentId, parentName, valor, data, categoria, descricao } = req.body;
+
+            let userExists = await Accounts.findOne( {_id : parentId });
+
+            const tipoExpense = Math.sign(valor);
+
+            if(tipoExpense === -1){
+                
+               
+                var positiveNumber = Math.abs(valor);
+                
+                if(userExists === null)
+                    throw new Error("Usuário não encontrado na base de dados");
+                
+                userExists.saldo -=  positiveNumber;
+                if(userExists.saldo < 0)
+                    throw new Error("Saldo insuficiente para efetuar a transação");
+                
+                userExists = new Accounts(userExists);
+                userExists.save();
+            }
+
+            if(tipoExpense === 1){
+
+                if(userExists === null)
+                    throw new Error("Usuário não encontrado na base de dados");
+                
+                userExists.saldo += valor;
+
+                userExists = new Accounts(userExists);
+                userExists.save();
+            }
+
+            if(userExists === null)
+                throw new Error("Usuário não encontrado na base de dados !");
 
             const newExpense = await expenses.create({
                 parentId,

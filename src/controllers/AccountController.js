@@ -85,6 +85,7 @@ class AccountController{
     async update(req, res, next){
         try{
             const { cpf } = req.body;
+            
             const cpfExists = await Accounts.findOne({cpf});
 
             if(cpfExists === null)

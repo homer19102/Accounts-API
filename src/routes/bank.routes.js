@@ -40,5 +40,6 @@ expensesRouter.put('/PutExpense', ExpensesController.PutExpense);
 //Goals Router
 goalsRouter.post('/NewGoal', GoalsController.PostGoal);
 goalsRouter.put('/TransferToGoal', GoalsController.PutTransferToGoal);
+goalsRouter.delete('/DeleteGoal', GoalsController.DeleteGoal);
 
 export {accountsRouter as accountsRouter, balanceRouter as balanceRouter, expensesRouter as expensesRouter, goalsRouter as goalsRouter};

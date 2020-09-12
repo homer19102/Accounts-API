@@ -12,6 +12,11 @@ class GoalsController {
 
             let currentGoalValue = 0;
 
+            const userExists = await Accounts.findOne( {_id : parentId });
+
+            if(userExists === null)
+                throw new Error("Usuário não encontrado na base de dados !");
+
             const newGoal = await goals.create({
                 parentId,
                 parentName,
@@ -51,13 +56,44 @@ class GoalsController {
             goalExists.currentGoalValue += value;
 
             contaExist = new Accounts(contaExist);
-            contaExist.save();
-
+            
             goalExists = new goals(goalExists);
+
+            contaExist.save();
             goalExists.save();
 
             return res.json("Transferência de " + `${ value } ` + "efetuada com sucesso para a meta " + ` ${ goalExists.nameGoal } `);
             
+        }catch(error){
+            next(error);
+        }
+    }
+
+    async DeleteGoal(req, res, next){
+        try{
+
+            const { _id } = req.body;
+
+            const goalExists = await goals.findOne( { _id });
+
+            if(goalExists === null)
+                throw new Error("Meta não encontrada na base de dados !");
+
+            const idUser = goalExists.parentId;
+
+            let user = await Accounts.findOne( { _id: idUser });
+
+            const valorAtualMeta = goalExists.currentGoalValue;
+
+            user.saldo += valorAtualMeta;
+
+            user = new Accounts(user);
+
+            await goals.findByIdAndRemove(goalExists);
+
+            user.save();
+
+            res.json("Meta excluída com sucesso");
 
         }catch(error){
             next(error);
