@@ -26,8 +26,8 @@ balanceRouter.put('/Transfer', BalancerController.Transferencia);
 
 
 //Compras Router
-expensesRouter.get('/Compras', ExpensesController.getComprasPorUsuario);
-expensesRouter.post('/NewCompra', ExpensesController.AddCompras);
+expensesRouter.get('/', ExpensesController.getComprasPorUsuario);
+expensesRouter.post('/NewExpense', ExpensesController.AddCompras);
 
 
 

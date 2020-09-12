@@ -9,7 +9,7 @@ routes.use('/accounts', accountsRouter);
 
 routes.use('/saldo', balanceRouter);
 
-routes.use('/compras', expensesRouter);
+routes.use('/expenses', expensesRouter);
 
 routes.use((err, req, res, next) => {
     res.status(400).send({ error: err.message });
