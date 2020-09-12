@@ -25,18 +25,10 @@ export default(mongoose) =>{
         saldo:{
             type: Number,
         },
-        metas:[{
-            NomeMeta: String,
-            ValorMeta: Number
-        }],
         email:{
             type: String,
             required: true
-        },
-        compra:[{
-            valor: Number,
-            categoria: String
-        }]
+        }
     });
 
     const accountsSchema = mongoose.model('Accounts', schema,'Accounts');

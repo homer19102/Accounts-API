@@ -1,6 +1,12 @@
 import { db } from '../../databaseConnect.js';
+import {promises as fs} from "fs";
+
+const { readFile , writeFile } = fs;
 
 const Accounts = db.accounts;
+
+global.fileName = "sequence.json";
+
 class AccountController{
     async getAccount(req, res, next){
         try{
@@ -19,9 +25,15 @@ class AccountController{
 
     async createAccount(req, res, next){
         try{
-            const {name, senha, cpf , email, agencia, conta, saldo} = req.body;
+            const {name, senha, cpf , email, saldo} = req.body;
+
+            const data = JSON.parse(await readFile( global.fileName ))
 
             let filterName = `${"@"}${name}`;
+
+            let conta = data.conta++;
+
+            let agencia = data.agencia;            
             
             const accountExists = await Accounts.findOne( { cpf });
 
@@ -39,7 +51,11 @@ class AccountController{
                     conta,
                     saldo
                 });
+
+                await writeFile(global.fileName, JSON.stringify(data, null, 2));
+
                 return res.json(newAccount);
+                
             }
         }catch(error){
             next(error);
