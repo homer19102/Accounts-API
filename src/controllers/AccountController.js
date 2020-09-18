@@ -1,5 +1,6 @@
 import { db } from '../../databaseConnect.js';
 import {promises as fs} from "fs";
+import bcrypt from 'bcrypt';
 
 const { readFile , writeFile } = fs;
 
@@ -31,6 +32,8 @@ class AccountController{
 
             let filterName = `${"@"}${name}`;
 
+            const password = await bcrypt.hash(senha, 10);
+
             let conta = data.conta++;
 
             let agencia = data.agencia;            
@@ -44,7 +47,7 @@ class AccountController{
                 const newAccount = await Accounts.create({
                     name,
                     filterName,
-                    senha,
+                    password,
                     cpf,
                     email,
                     agencia,

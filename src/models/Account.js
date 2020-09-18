@@ -8,7 +8,7 @@ export default(mongoose) =>{
         filterName:{
             type: String,
         },
-        senha:{
+        password:{
             type: String,
             required: true
         },

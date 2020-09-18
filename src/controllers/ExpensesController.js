@@ -1,5 +1,5 @@
 import { db } from '../../databaseConnect.js';
-import ValidConta from '../utils/ValidConta.js';
+
 
 const expenses = db.expenses;
 const Accounts = db.accounts;
@@ -15,7 +15,6 @@ class ExpensesController {
 
             if(tipoExpense === -1){
                 
-               
                 var positiveNumber = Math.abs(valor);
                 
                 if(userExists === null)
