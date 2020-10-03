@@ -30,7 +30,7 @@ app.use(cors());
 
 app.use(routes);
 
-app.listen(process.env.PORTAPI,() =>{
+app.listen(process.env.PORTAPI || 3000,() =>{
     console.log('API start')
 });
 
