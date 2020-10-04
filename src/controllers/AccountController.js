@@ -26,11 +26,11 @@ class AccountController{
 
     async createAccount(req, res, next){
         try{
-            const {name, senha, cpf , email, saldo} = req.body;
+            const {name, senha, cpf , email, saldo, userFilter} = req.body;
 
             const data = JSON.parse(await readFile( global.fileName ))
 
-            let filterName = `${"@"}${name}`;
+            let filterName = `${"@"}${userFilter}`;
 
             const password = await bcrypt.hash(senha, 10);
 
@@ -40,8 +40,13 @@ class AccountController{
             
             const accountExists = await Accounts.findOne( { cpf });
 
+            const userExists = await Accounts.findOne ( { filterName : filterName } );
+
             if(accountExists !== null)
                 throw new Error("Usuário já existente para o CPF " +  `${cpf}`);
+
+            if(userExists !== null)
+                throw new Error("Nome de usuário já cadastrado " +  `${filterName}`);
     
             if(accountExists === null){
                 const newAccount = await Accounts.create({
