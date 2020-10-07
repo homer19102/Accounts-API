@@ -25,9 +25,9 @@ class AccountController{
         try{
             const {name, senha, cpf , email, saldo, userFilter} = req.body;
 
-            let validEmail2 = await ValidEmail.validEmail(email);
+            let validEmail = await ValidEmail.validEmail(email);
 
-            if(!validEmail2)
+            if(!validEmail)
                 throw new Error("E-mail informado está fora do padrão ! Tente novamente");
 
             let filterName = `${"@"}${userFilter}`;
