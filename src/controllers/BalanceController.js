@@ -26,7 +26,7 @@ class BalancerController{
             contaDestinoo = new Accounts(contaDestinoo);
             contaDestinoo.save();
 
-                //cria despesa negativa para o usuário que está transferindo o dinheiro
+                //cria despesa negativa para o usuário que está transferindo o dinheiro para o usuário
             const newExpenseNegative = await expenses.create({
                 parentId : contaInicial._id,
                 parentName : contaInicial.filterName,
