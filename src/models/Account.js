@@ -10,7 +10,6 @@ export default(mongoose) =>{
         },
         password:{
             type: String,
-            required: true
         },
         agencia:{
             type: String,

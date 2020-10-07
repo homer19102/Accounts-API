@@ -1,12 +1,9 @@
 import { db } from '../../databaseConnect.js';
-import {promises as fs} from "fs";
 import bcrypt from 'bcrypt';
-
-const { readFile , writeFile } = fs;
+import ValidEmail from '../utils/ValidEmail.js';
 
 const Accounts = db.accounts;
-
-global.fileName = "sequence.json";
+const AccountsSequence = db.accountSequence;
 
 class AccountController{
     async getAccount(req, res, next){
@@ -28,25 +25,31 @@ class AccountController{
         try{
             const {name, senha, cpf , email, saldo, userFilter} = req.body;
 
-            const data = JSON.parse(await readFile( global.fileName ))
+            let validEmail2 = await ValidEmail.validEmail(email);
+
+            if(!validEmail2)
+                throw new Error("E-mail informado está fora do padrão ! Tente novamente");
 
             let filterName = `${"@"}${userFilter}`;
 
             const password = await bcrypt.hash(senha, 10);
 
-            let conta = data.conta++;
-
-            let agencia = data.agencia;            
-            
             const accountExists = await Accounts.findOne( { cpf });
 
             const userExists = await Accounts.findOne ( { filterName : filterName } );
 
+            const emailExists = await Accounts.findOne ( { email } );
+
+            let sequence = await AccountsSequence.findOne();
+            
             if(accountExists !== null)
                 throw new Error("Usuário já existente para o CPF " +  `${cpf}`);
 
             if(userExists !== null)
                 throw new Error("Nome de usuário já cadastrado " +  `${filterName}`);
+
+            if(emailExists !== null)
+                throw new Error("O email informando já possui cadastro " +  `${email}`);
     
             if(accountExists === null){
                 const newAccount = await Accounts.create({
@@ -55,15 +58,18 @@ class AccountController{
                     password,
                     cpf,
                     email,
-                    agencia,
-                    conta,
+                    agencia : sequence.agencia,
+                    conta : sequence.conta,
                     saldo
                 });
 
-                await writeFile(global.fileName, JSON.stringify(data, null, 2));
+                sequence.conta++
 
-                return res.json(newAccount);
+                sequence = new AccountsSequence(sequence);
+            
+                sequence.save();
                 
+                return res.json(newAccount);
             }
         }catch(error){
             next(error);
@@ -111,5 +117,6 @@ class AccountController{
         
     }
 }
+
 
 export default new AccountController();

@@ -23,6 +23,9 @@ export default (mongoose) => {
         descricao:{
             type: String,
             required: true,
+        },
+        targetUser:{
+            type: String,
         }
     })
 
