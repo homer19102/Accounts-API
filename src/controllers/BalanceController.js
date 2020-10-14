@@ -12,6 +12,11 @@ class BalancerController{
             let contaInicial = await ValidConta.validaConta(conta, next);
             let contaDestinoo = await ValidConta.validaConta(contaDestino, next);
 
+            const tipoExpense = Math.sign(valor);
+
+            if(tipoExpense === -1 || tipoExpense === 0)
+                throw new Error("O valor não pode ser negativo ou zero !");
+
             let valorNegativo = valor * -1;
             contaInicial.saldo -= valor;
             if(contaInicial.saldo < 0){
