@@ -1,6 +1,7 @@
 import { db } from '../../databaseConnect.js';
 import bcrypt from 'bcrypt';
 import ValidEmail from '../utils/ValidEmail.js';
+import ValidCpf from '../utils/ValidCPF.js';
 
 const Accounts = db.accounts;
 const AccountsSequence = db.accountSequence;
@@ -24,6 +25,11 @@ class AccountController{
     async createAccount(req, res, next){
         try{
             const {name, senha, cpf , email, saldo, userFilter} = req.body;
+
+            let validCpf = await ValidCpf.validCpf(cpf);
+
+            if(!validCpf)
+                throw new Error("O CPF informando não atende ao formato !");
 
             let validEmail = await ValidEmail.validEmail(email);
 
