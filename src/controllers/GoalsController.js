@@ -5,6 +5,26 @@ const goals = db.goals;
 const Accounts = db.accounts;
 
 class GoalsController {
+
+    async GetGoals(req, res ,next){
+        try{
+
+            const { parentId } = req.body;
+
+            const userExists = await Accounts.findOne( {_id : parentId });
+
+            if(userExists === null)
+                throw new Error("Usuário não encontrado na base de dados !");
+
+            const goalsUser = await goals.find({ parentId }).sort({ data: - 1 });
+
+            return res.json(goalsUser);
+
+        }catch(error){
+            next(error);
+        }
+    };
+
     async PostGoal(req, res, next){
         try{
 
@@ -47,6 +67,8 @@ class GoalsController {
                 throw new Error("Meta não encontrada na base de dados !");
             
             let contaExist = await ValidConta.validaConta(conta, next);
+
+            if(contaExist._id !== goalExists.parentId)
 
             contaExist.saldo -= value;
 

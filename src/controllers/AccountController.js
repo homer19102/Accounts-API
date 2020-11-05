@@ -2,6 +2,7 @@ import { db } from '../../databaseConnect.js';
 import bcrypt from 'bcrypt';
 import ValidEmail from '../utils/ValidEmail.js';
 import ValidCpf from '../utils/ValidCPF.js';
+import ValidPassword from '../utils/ValidSenha.js';
 
 const Accounts = db.accounts;
 const AccountsSequence = db.accountSequence;
@@ -27,6 +28,8 @@ class AccountController{
             const {name, senha, cpf , email, saldo, userFilter} = req.body;
 
             let validCpf = await ValidCpf.validCpf(cpf);
+
+            await ValidPassword.ValidPassword(senha, next);
 
             if(!validCpf)
                 throw new Error("O CPF informando não atende ao formato !");

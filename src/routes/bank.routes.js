@@ -43,6 +43,7 @@ expensesRouter.put('/PutExpense', ExpensesController.PutExpense);
 goalsRouter.post('/NewGoal', GoalsController.PostGoal);
 goalsRouter.put('/TransferToGoal', GoalsController.PutTransferToGoal);
 goalsRouter.delete('/DeleteGoal', GoalsController.DeleteGoal);
+goalsRouter.get('/GetGoalsUser', GoalsController.GetGoals);
 
 //Login Router
 loginRouter.get('/', LoginController.Login);
