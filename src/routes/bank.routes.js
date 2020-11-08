@@ -28,6 +28,7 @@ accountsRouter.get('/', AccountController.getAccount);
 accountsRouter.post('/NewUser/', AccountController.createAccount);
 accountsRouter.delete('/DeleteUser', AccountController.delete);
 accountsRouter.put('/UpdateUser', AccountController.update);
+accountsRouter.get('/GetUserFilterName', AccountController.getUserFilterName);
 
 //Balance Router
 balanceRouter.put('/Transfer', BalancerController.Transferencia);

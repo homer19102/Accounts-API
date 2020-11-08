@@ -69,6 +69,7 @@ class GoalsController {
             let contaExist = await ValidConta.validaConta(conta, next);
 
             if(contaExist._id !== goalExists.parentId)
+                throw new Error("A conta a ser debitada não pertence ao usuário !");
 
             contaExist.saldo -= value;
 

@@ -23,6 +23,22 @@ class AccountController{
         }
     }
 
+    async getUserFilterName(req, res, next){
+        try{
+            const { filterName } = req.body;
+
+            const filterNameExists = await Accounts.find( { filterName } );
+
+            if(filterNameExists.length === 0)
+                throw new Error("Usuário inexistente para o FilterName " +  `${filterName}`);
+
+            return res.json(filterNameExists);
+
+        }catch(error){
+            next(error);
+        }
+    }
+
     async createAccount(req, res, next){
         try{
             const {name, senha, cpf , email, saldo, userFilter} = req.body;
