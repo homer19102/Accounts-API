@@ -67,8 +67,8 @@ class GoalsController {
                 throw new Error("Meta não encontrada na base de dados !");
             
             let contaExist = await ValidConta.validaConta(conta, next);
-
-            if(contaExist._id !== goalExists.parentId)
+            
+            if(contaExist.id !== goalExists.parentId)
                 throw new Error("A conta a ser debitada não pertence ao usuário !");
 
             contaExist.saldo -= value;
