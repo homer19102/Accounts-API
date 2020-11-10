@@ -48,7 +48,7 @@ class AccountController{
             let passwordValid = await ValidPassword.ValidPassword(senha, next);
 
             if(!passwordValid)
-                throw new Error("A senha deve conter pelo menos 1 número, 1 letra maiúscula e 1 caractere especial, tente novamente !");
+                throw new Error("A senha deve conter pelo menos 1 número, 1 letra maiúscula, 1 caractere especial, e entre 6 e 16 dígitos tente novamente !");
 
             if(!validCpf)
                 throw new Error("O CPF informando não atende ao formato !");
