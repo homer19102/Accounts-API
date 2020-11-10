@@ -3,13 +3,15 @@ class Password
     async ValidPassword(pass, next){
         try{
 
-            const regexPassword = /^(?=(?:.*?[A-Z]){2})(?=(?:.*?[0-9]){1})(?=(?:.*?[!@#$%*()_+^&}{:;?.]){1})(?!.*\s)[0-9a-zA-Z!@#$%;*(){}_+^&]*$/;
+            const regexPassword = /^(?=(?:.*?[A-Z]){1})(?=(?:.*?[0-9]){1})(?=(?:.*?[!@#$%*()_+^&}{:;?.]){1})(?!.*\s)[0-9a-zA-Z!@#$%;*(){}_+^&]*$/;
 
             if(pass.length <= 7)
-                throw new Error("A senha deve conter no minímo 7 digitos ! ");
+                return false;
 
             else if(!regexPassword.exec(pass))
-                throw new Error("A senha deve conter no minímo 2 caracteres em maiúsculo, 1 número e um caractere especial");
+                return false;
+            
+            return true;
 
         }catch(error){
             next(error);
