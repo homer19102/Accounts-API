@@ -1,6 +1,8 @@
 import { db } from '../../databaseConnect.js';
 import bcrypt from 'bcrypt';
 import ValidEmail from '../utils/ValidEmail.js';
+import ValidCpf from '../utils/ValidCPF.js';
+import ValidPassword from '../utils/ValidSenha.js';
 
 const Accounts = db.accounts;
 const AccountsSequence = db.accountSequence;
@@ -21,9 +23,35 @@ class AccountController{
         }
     }
 
+    async getUserFilterName(req, res, next){
+        try{
+            const { filterName } = req.body;
+
+            const filterNameExists = await Accounts.find( { filterName } );
+
+            if(filterNameExists.length === 0)
+                throw new Error("Usuário inexistente para o FilterName " +  `${filterName}`);
+
+            return res.json(filterNameExists);
+
+        }catch(error){
+            next(error);
+        }
+    }
+
     async createAccount(req, res, next){
         try{
             const {name, senha, cpf , email, saldo, userFilter} = req.body;
+
+            let validCpf = await ValidCpf.validCpf(cpf);
+
+            let passwordValid = await ValidPassword.ValidPassword(senha, next);
+
+            if(!passwordValid)
+                throw new Error("A senha deve conter pelo menos 1 número, 1 letra maiúscula, 1 caractere especial, e entre 6 e 16 dígitos tente novamente !");
+
+            if(!validCpf)
+                throw new Error("O CPF informando não atende ao formato !");
 
             let validEmail = await ValidEmail.validEmail(email);
 

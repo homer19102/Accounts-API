@@ -1,7 +1,7 @@
 class IsEmail
 {
     async validEmail(email){
-        var expression = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+        let expression = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
         if (expression.test(email))
             return true; 
         else

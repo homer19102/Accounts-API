@@ -28,6 +28,7 @@ accountsRouter.get('/', AccountController.getAccount);
 accountsRouter.post('/NewUser/', AccountController.createAccount);
 accountsRouter.delete('/DeleteUser', AccountController.delete);
 accountsRouter.put('/UpdateUser', AccountController.update);
+accountsRouter.get('/GetUserFilterName', AccountController.getUserFilterName);
 
 //Balance Router
 balanceRouter.put('/Transfer', BalancerController.Transferencia);
@@ -43,6 +44,7 @@ expensesRouter.put('/PutExpense', ExpensesController.PutExpense);
 goalsRouter.post('/NewGoal', GoalsController.PostGoal);
 goalsRouter.put('/TransferToGoal', GoalsController.PutTransferToGoal);
 goalsRouter.delete('/DeleteGoal', GoalsController.DeleteGoal);
+goalsRouter.get('/GetGoalsUser', GoalsController.GetGoals);
 
 //Login Router
 loginRouter.get('/', LoginController.Login);
