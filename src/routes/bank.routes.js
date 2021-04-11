@@ -53,6 +53,7 @@ goalsRouter.get('/GetGoalsUser', GoalsController.GetGoals);
 
 //Stocks Router
 stockRouter.post('/NewStock', StocksController.PostStock);
+stockRouter.get('/GetStocks', StocksController.GetStocks);
 
 //Login Router
 loginRouter.get('/', LoginController.Login);
