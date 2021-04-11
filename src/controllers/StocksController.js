@@ -17,6 +17,17 @@ class StocksController{
 
     }
 
+     async GetStocks(req, res, next){
+        try{
+
+            const stocks = await StockMarketPlace.find().sort({ startDate: - 1 });
+
+            return res.json(stocks);
+        }catch(error){
+            next(error);
+        }
+    }
+
 }
 
 
