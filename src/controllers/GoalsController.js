@@ -122,6 +122,24 @@ class GoalsController {
             next(error);
         }
     }
+
+    async GetGoal(req, next){
+        try{
+
+            const { goalId, parentId } = req.body;
+
+            const goalExist = await goals.findOne( { _id : goalId, parentId : parentId });
+
+            if(!goalExist)
+                throw new Error("Meta não encontrada na base de dados !");
+
+            
+            return goalExist;
+
+        }catch(error){
+            next(error);
+        }
+    }
 };
 
 export default new GoalsController();
