@@ -5,6 +5,7 @@ import goalsSchema from './src/models/Goals.js';
 import accountSequenceSchema from './src/models/AccountSequence.js';
 import stockMarketPlaceSchema from './src/models/StockMarketPlace.js';
 import userStockSchema from './src/models/UserStock.js';
+import clientStocksSchema from './src/models/ClientStocks.js';
 import dotenv from "dotenv";
 
 
@@ -20,5 +21,6 @@ db.goals = goalsSchema(mongoose);
 db.accountSequence = accountSequenceSchema(mongoose);
 db.stockmarketplace = stockMarketPlaceSchema(mongoose);
 db.userStock = userStockSchema(mongoose);
+db.clientStocks = clientStocksSchema(mongoose);
 
 export { db };

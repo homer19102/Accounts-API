@@ -60,6 +60,7 @@ stockRouter.get('/GetStocks', StocksController.GetStocks);
 //User Stocks
 stockRouter.post('/PostStockUserGoal', UserStockController.AddUserStockGoal);
 stockRouter.post('/PostStockUserAccount', UserStockController.AddUserStockAccount);
+stockRouter.get('/GetUserStocks/:userId', UserStockController.GetUserStocks);
 
 //Login Router
 loginRouter.get('/', LoginController.Login);
