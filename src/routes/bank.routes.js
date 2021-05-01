@@ -56,6 +56,7 @@ goalsRouter.get('/GetGoalsUser', GoalsController.GetGoals);
 //Stocks Router
 stockRouter.post('/NewStock', StocksController.PostStock);
 stockRouter.get('/GetStocks', StocksController.GetStocks);
+stockRouter.get('/GetStock/:stockId', StocksController.GetStock);
 
 //User Stocks
 stockRouter.post('/PostStockUserGoal', UserStockController.AddUserStockGoal);
