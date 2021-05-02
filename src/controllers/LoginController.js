@@ -26,7 +26,7 @@ class LoginController {
                     saldo : userExists.saldo
                 });
             else{
-                throw new Error("Senha incorreta !");
+                throw new Error("Senha ou usuário incorretos !");
             }
         }catch(error){
             next(error);
