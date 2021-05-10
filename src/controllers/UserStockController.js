@@ -19,8 +19,8 @@ class UserStockController{
             if(!validStock)
                 return;
 
-            if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
-                return;
+            //if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
+              //  return null;
 
             const stockTotalValue = stockPrice * stockQtd
 
@@ -43,6 +43,10 @@ class UserStockController{
 
             if(!validStock)
                 return;
+            
+            
+           // if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
+             //   return null;
 
             const stockTotalValue = stockPrice * stockQtd
 
