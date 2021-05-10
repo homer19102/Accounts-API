@@ -91,6 +91,26 @@ export default(mongoose) => {
             type: String,
             required: true
         },
+        locationSummary:{
+            type: String,
+            required: true
+        },
+        structuresSummary:{
+            type: String,
+            required: true
+        },
+        financeSummary:{
+            type: String,
+            required: true
+        },
+        marketSummary:{
+            type: String,
+            required: true
+        },
+        useOfRecipes:{
+            type: Object,
+            required: true
+        },
         latitude:{
             type: String,
             required: true

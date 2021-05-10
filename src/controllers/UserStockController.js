@@ -1,22 +1,34 @@
 import { db } from '../../databaseConnect.js';
 import GoalsController from './GoalsController.js';
 import MathValidations from '../utils/MathValidations.js';
+import ValidStock from '../utils/ValidStock.js';
 
 const expenses = db.expenses;
 const Accounts = db.accounts;
 const goals = db.goals;
 const clientStocks = db.clientStocks;
+const stock = db.stockmarketplace;
 
 class UserStockController{
     async AddUserStockGoal(req, res, next){
         try{
-            const { stockQtd, stockPrice} = req.body;
+            const { stockId, stockQtd, stockPrice} = req.body;
+
+            let validStock = await ValidStock.validaStock(stockId, next);
+
+            if(!validStock)
+                return;
+
+            if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
+                return;
 
             const stockTotalValue = stockPrice * stockQtd
 
-            await UpdateGoal(req, next, stockTotalValue);
+            const goal = await UpdateGoal(req, next, stockTotalValue);
+            await UpdateStockRequests(validStock, stockQtd, next);
                 
-            return res.json("Valor " + `${ stockTotalValue } ` + " retirado da meta teste para o investimento TESTE, efetuado com sucesso !");
+            return res.json("Valor " + `${ stockTotalValue } ` + "retirado da meta "  + `${ goal.nameGoal } ` + 
+            "para o investimento " + `${ validStock.stockDisplayName } ` + ", efetuado com sucesso !");
         
         }catch(error){
             next(error);
@@ -25,7 +37,12 @@ class UserStockController{
 
     async AddUserStockAccount(req, res, next){
         try{
-            const { parentId, stockQtd, stockPrice } = req.body;
+            const { stockId, parentId, stockQtd, stockPrice } = req.body;
+
+            let validStock = await ValidStock.validaStock(stockId, next);
+
+            if(!validStock)
+                return;
 
             const stockTotalValue = stockPrice * stockQtd
 
@@ -35,6 +52,7 @@ class UserStockController{
                 throw new Error("Conta não encontrada na base de dados");
 
             await UpdateAccount(req, accountExist, stockTotalValue, next);
+            await UpdateStockRequests(validStock, stockQtd, next);
 
             return res.json("Valor " + `${ stockTotalValue } ` + " retirado da conta corrente para o investimento TESTE, efetuado com sucesso !");
 
@@ -154,6 +172,7 @@ async function UpdateGoal(req, next, stockTotalValue){
         {
             await AddExpense(req, stockTotalValue, goal, next);
             await AddClientStocks(next, stockTotalValue, req, goal.parentId);
+            return goal;
         }
 }
 
@@ -169,6 +188,20 @@ async function AddClientStocks(next, stockTotalValue, req, idCLiente){
             totalValue: stockTotalValue,
         });
 
+}
+
+async function UpdateStockRequests(validStock, stockQtd, next){
+    try{
+
+        validStock.numberOfRequests += stockQtd;
+
+        await stock.findByIdAndUpdate(validStock._id, validStock, {
+            new : true,
+        });
+
+    }catch(error){
+        next(error);
+    }
 }
 
 export default new UserStockController();
