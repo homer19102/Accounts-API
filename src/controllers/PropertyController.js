@@ -13,7 +13,7 @@ class PropertyController{
 
            const stock = await stockmarketplace.findOne( { _id : propertyId } );
 
-           if(stock)
+           if(!stock)
                 throw new Error('Stock não encontrada na base de dados !');
     
            if(propertyOccupationExist)
