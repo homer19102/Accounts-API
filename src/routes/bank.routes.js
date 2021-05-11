@@ -14,6 +14,8 @@ import StocksController from '../controllers/StocksController.js';
 
 import UserStockController  from '../controllers/UserStockController.js';
 
+import PropertyController from '../controllers/PropertyController.js';
+
 
 const { Router } = express;
 
@@ -26,6 +28,8 @@ const expensesRouter = Router();
 const goalsRouter = Router();
 
 const stockRouter = Router();
+
+const propertyRouter = Router();
 
 const loginRouter = Router();
 
@@ -63,6 +67,9 @@ stockRouter.post('/PostStockUserGoal', UserStockController.AddUserStockGoal);
 stockRouter.post('/PostStockUserAccount', UserStockController.AddUserStockAccount);
 stockRouter.get('/GetUserStocks/:userId', UserStockController.GetUserStocks);
 
+//Property
+propertyRouter.post('/PostPropertyOccupation', PropertyController.PostPropertyOccupation);
+
 //Login Router
 loginRouter.get('/', LoginController.Login);
 
@@ -71,4 +78,5 @@ export {accountsRouter as accountsRouter,
      expensesRouter as expensesRouter,
      goalsRouter as goalsRouter,
      stockRouter as stockRouter,
-     loginRouter as loginRouter};
+     loginRouter as loginRouter,
+     propertyRouter as propertyRouter };
