@@ -85,7 +85,7 @@ class UserStockController{
                     }
                 }
             ]);
-            
+
             if(!existStock)
                 throw new Error("Não encontrado nenhum investimento na base de dados !");
 
@@ -94,7 +94,7 @@ class UserStockController{
             existStock.forEach(x => {
                 data.push({
                     id: x.parentStockId,
-                    stockDisplayName: x.user_stock[0].stockDisplayName,
+                    stockDisplayName: x.user_stock[0] ? x.user_stock[0].stockDisplayName : null,
                     totalInvestment: x.totalValue
                 })
             })
