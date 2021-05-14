@@ -16,6 +16,8 @@ import UserStockController  from '../controllers/UserStockController.js';
 
 import PropertyController from '../controllers/PropertyController.js';
 
+import AverageSellingPriceController from '../controllers/AverageSellingPriceController.js';
+
 
 const { Router } = express;
 
@@ -30,6 +32,8 @@ const goalsRouter = Router();
 const stockRouter = Router();
 
 const propertyRouter = Router();
+
+const averageSellingPriceRouter = Router();
 
 const loginRouter = Router();
 
@@ -70,6 +74,9 @@ stockRouter.get('/GetUserStocks/:userId', UserStockController.GetUserStocks);
 //Property
 propertyRouter.post('/PostPropertyOccupation', PropertyController.PostPropertyOccupation);
 
+//Average Selling Price
+averageSellingPriceRouter.post('/PostAverageSellingPrice', AverageSellingPriceController.PostAverageSellingPrice);
+
 //Login Router
 loginRouter.get('/', LoginController.Login);
 
@@ -79,4 +86,5 @@ export {accountsRouter as accountsRouter,
      goalsRouter as goalsRouter,
      stockRouter as stockRouter,
      loginRouter as loginRouter,
-     propertyRouter as propertyRouter };
+     propertyRouter as propertyRouter,
+     averageSellingPriceRouter as averageSellingPriceRouter };
