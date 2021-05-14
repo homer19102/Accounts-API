@@ -7,6 +7,7 @@ import stockMarketPlaceSchema from './src/models/StockMarketPlace.js';
 import userStockSchema from './src/models/UserStock.js';
 import clientStocksSchema from './src/models/ClientStocks.js';
 import propertyOccupationSchema from './src/models/PropertyOccupation.js';
+import averageSellingPriceSchema from './src/models/AverageSellingPrice.js';
 import dotenv from "dotenv";
 
 
@@ -24,5 +25,6 @@ db.stockmarketplace = stockMarketPlaceSchema(mongoose);
 db.userStock = userStockSchema(mongoose);
 db.clientStocks = clientStocksSchema(mongoose);
 db.propertyOccupation = propertyOccupationSchema(mongoose);
+db.averageSellingPrice = averageSellingPriceSchema(mongoose);
 
 export { db };

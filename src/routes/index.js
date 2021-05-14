@@ -6,6 +6,7 @@ import {
    goalsRouter,
    stockRouter,
    propertyRouter,
+   averageSellingPriceRouter,
    loginRouter 
 } from './bank.routes.js';
 
@@ -24,6 +25,8 @@ routes.use('/goals', goalsRouter);
 routes.use('/stocks', stockRouter);
 
 routes.use('/property', propertyRouter);
+
+routes.use('/averageSellingPriceRouter', averageSellingPriceRouter);
 
 routes.use('/login', loginRouter);
 

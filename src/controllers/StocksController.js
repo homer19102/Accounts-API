@@ -55,12 +55,19 @@ class StocksController{
                         foreignField: "propertyIdObject", 
                         as: "property_occupation" 
                     }
-                }
+                },
+                {
+                    $lookup:{
+                        from: "AverageSellingPrice", 
+                        localField: "_id", 
+                        foreignField: "propertyIdObject",
+                        as: "average_selling_price"
+                    }
+                },
             ]);
 
             if(!stock)
                 throw new Error('Stock não encontrada na base de dados !');
-
             
             const data = [];
 
@@ -78,6 +85,18 @@ class StocksController{
                         eightYear:  x.property_occupation[0].eightYear,
                         nineYear:  x.property_occupation[0].nineYear,
                         tenYear:  x.property_occupation[0].tenYear,
+                    },
+                    average_selling_price : {
+                        oneYear : x.average_selling_price[0].oneYear,
+                        twoYear : x.average_selling_price[0].twoYear,
+                        threeYear :  x.average_selling_price[0].threeYear,
+                        fourYear :  x.average_selling_price[0].fourYear,
+                        fiveYear:  x.average_selling_price[0].fiveYear,
+                        sixYear:  x.average_selling_price[0].sixYear,
+                        sevenYear:  x.average_selling_price[0].sevenYear,
+                        eightYear:  x.average_selling_price[0].eightYear,
+                        nineYear:  x.average_selling_price[0].nineYear,
+                        tenYear:  x.average_selling_price[0].tenYear,
                     }
                   
                 })
