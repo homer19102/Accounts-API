@@ -118,6 +118,10 @@ export default(mongoose) => {
         longitude:{
             type: String,
             required: true
+        },
+        estimatedRental:{
+            type: Number,
+            required: true
         }
     })
 
