@@ -6,6 +6,11 @@ class MathValidations{
             next(error);
         }
     };
+
+    FormatDecimal(value, houses){
+        const og = Math.pow(10, houses)
+        return Math.floor(value * og) / og;
+    }
 };
 
 export default new MathValidations();

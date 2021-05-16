@@ -1,5 +1,6 @@
 import { db } from '../../databaseConnect.js';
 import mongoose from 'mongoose';
+import MathValidations from '../utils/MathValidations.js';
 
 const StockMarketPlace = db.stockmarketplace;
 const propertyOccupation = db.propertyOccupation;
@@ -22,9 +23,18 @@ class StocksController{
      async GetStocks(req, res, next){
         try{
 
-            const stocks = await StockMarketPlace.find().sort({ startDate: - 1 });
+            const stocks = await StockMarketPlace.find().sort({ startDate: - 1 }).lean();
 
-            return res.json(stocks);
+            const dados = [];
+
+            stocks.map(item => {
+                dados.push({
+                    ...item,
+                    dividend: CalculaDividendos(item.estimatedRental, item.numberShares)
+                })
+            })
+
+            return res.json(dados);
         }catch(error){
             next(error);
         }
@@ -97,7 +107,8 @@ class StocksController{
                         eightYear:  x.average_selling_price[0].eightYear,
                         nineYear:  x.average_selling_price[0].nineYear,
                         tenYear:  x.average_selling_price[0].tenYear,
-                    }
+                    },
+                    dividend: CalculaDividendos(x.estimatedRental, x.numberShares)
                   
                 })
             })
@@ -109,6 +120,12 @@ class StocksController{
         }
     }
 
+}
+
+function CalculaDividendos(aluguelEstimado, totalDeCotas){
+    if(!aluguelEstimado || !totalDeCotas) return null;
+
+    return MathValidations.FormatDecimal((aluguelEstimado / totalDeCotas) / 12, 2);    
 }
 
 
