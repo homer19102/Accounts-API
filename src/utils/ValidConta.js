@@ -10,7 +10,7 @@ class ValidConta{
             };
             conta = await Accounts.findOne(conta);
 
-            if(conta)
+            if(!conta)
                 throw new Error("Conta não encontrada na base de dados !");
 
             return conta;

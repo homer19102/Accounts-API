@@ -30,7 +30,7 @@ class StocksController{
             stocks.map(item => {
                 dados.push({
                     ...item,
-                    dividend: CalculaDividendos(item.estimatedRental, item.numberShares)
+                    dividend: CalculaDividendos(item.estimatedRental, item.stockPrice)
                 })
             })
 
