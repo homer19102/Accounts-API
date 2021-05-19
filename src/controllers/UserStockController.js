@@ -14,10 +14,10 @@ class UserStockController{
         try{
             const { stockId, stockQtd, stockPrice} = req.body;
 
-            let validStock = await ValidStock.validaStock(stockId, next);
+          //  let validStock = await ValidStock.validaStock(stockId, next);
 
-            if(!validStock)
-                return;
+            //if(!validStock)
+              //  return;
 
             //if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
               //  return null;
@@ -39,10 +39,10 @@ class UserStockController{
         try{
             const { stockId, parentId, stockQtd, stockPrice } = req.body;
 
-            let validStock = await ValidStock.validaStock(stockId, next);
+        //    let validStock = await ValidStock.validaStock(stockId, next);
 
-            if(!validStock)
-                return;
+          //  if(!validStock)
+            //    return;
             
             
            // if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
@@ -195,17 +195,15 @@ async function AddClientStocks(next, stockTotalValue, req, idCLiente){
 }
 
 async function UpdateStockRequests(validStock, stockQtd, next){
-    try{
+  
 
         validStock.numberOfRequests += stockQtd;
 
-        await stock.findByIdAndUpdate(validStock._id, validStock, {
+        var s = await stock.findByIdAndUpdate(validStock._id, validStock, {
             new : true,
         });
 
-    }catch(error){
-        next(error);
-    }
+  
 }
 
 export default new UserStockController();
