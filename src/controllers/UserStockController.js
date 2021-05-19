@@ -14,10 +14,10 @@ class UserStockController{
         try{
             const { stockId, stockQtd, stockPrice} = req.body;
 
-          //  let validStock = await ValidStock.validaStock(stockId, next);
+            let validStock = await ValidStock.validaStock(stockId, next);
 
-            //if(!validStock)
-              //  return;
+            if(!validStock)
+                return;
 
             //if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
               //  return null;
@@ -39,10 +39,10 @@ class UserStockController{
         try{
             const { stockId, parentId, stockQtd, stockPrice } = req.body;
 
-        //    let validStock = await ValidStock.validaStock(stockId, next);
+            let validStock = await ValidStock.validaStock(stockId, next);
 
-          //  if(!validStock)
-            //    return;
+            if(!validStock)
+                return;
             
             
            // if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
