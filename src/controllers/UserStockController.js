@@ -24,7 +24,7 @@ class UserStockController{
 
             const stockTotalValue = stockPrice * stockQtd
 
-            const goal = await UpdateGoal(req, next, stockTotalValue);
+            const goal = await UpdateGoal(req, next, stockTotalValue, validStock);
             await UpdateStockRequests(validStock, stockQtd, next);
                 
             return res.json("Valor " + `${ stockTotalValue } ` + "retirado da meta "  + `${ goal.nameGoal } ` + 
@@ -55,7 +55,7 @@ class UserStockController{
             if(accountExist === null)
                 throw new Error("Conta não encontrada na base de dados");
 
-            await UpdateAccount(req, accountExist, stockTotalValue, next);
+            await UpdateAccount(req, accountExist, stockTotalValue, next, validStock);
             await UpdateStockRequests(validStock, stockQtd, next);
 
             return res.json("Valor " + `${ stockTotalValue } ` + " retirado da conta corrente para o investimento " + `${ validStock.stockDisplayName } ` + ", efetuado com sucesso !");
@@ -107,7 +107,7 @@ class UserStockController{
     }
 }
 
-async function AddExpense(req, stockTotalValue, account, next){
+async function AddExpense(req, stockTotalValue, account, next, stock){
 
         const { parentId, data} = req.body;
 
@@ -124,11 +124,11 @@ async function AddExpense(req, stockTotalValue, account, next){
                 valor: expenseValue,
                 data : data,
                 categoria : "Investimentos",
-                descricao : "Teste"
+                descricao : stock.stockName
             });
 }
 
-async function UpdateAccount(req, account, stockTotalValue, next){
+async function UpdateAccount(req, account, stockTotalValue, next, stock){
     
         if(account.saldo < stockTotalValue)
             throw new Error("Saldo Insuficiente para efetuar a operação !");
@@ -146,13 +146,13 @@ async function UpdateAccount(req, account, stockTotalValue, next){
 
         if(AccountUpdate)
         {
-            await AddExpense(req, stockTotalValue, newAccount, next);  
+            await AddExpense(req, stockTotalValue, newAccount, next, stock);  
             await AddClientStocks(next, stockTotalValue, req, account._id)
         }
            
 }
 
-async function UpdateGoal(req, next, stockTotalValue){
+async function UpdateGoal(req, next, stockTotalValue, stock){
 
         const { parentId } = req.body;
 
@@ -174,7 +174,7 @@ async function UpdateGoal(req, next, stockTotalValue){
 
         if(goalUpdate)
         {
-            await AddExpense(req, stockTotalValue, goal, next);
+            await AddExpense(req, stockTotalValue, goal, next, stock);
             await AddClientStocks(next, stockTotalValue, req, goal.parentId);
             return goal;
         }
