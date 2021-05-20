@@ -110,7 +110,7 @@ class StocksController{
                         nineYear:  x.average_selling_price[0].nineYear,
                         tenYear:  x.average_selling_price[0].tenYear,
                     },
-                    dividend: CalculaDividendos(x.estimatedRental, x.numberShares)
+                    dividend: CalculaDividendos(x.estimatedRental, x.numberShares),
                   
                 })
             })
@@ -126,6 +126,9 @@ class StocksController{
 
 function CalculaDividendos(aluguelEstimado, totalDeCotas){
     if(!aluguelEstimado || !totalDeCotas) return null;
+    console.log('total de cotas', totalDeCotas)
+    var t = parseFloat(totalDeCotas);
+    var s  = MathValidations.FormatDecimal((aluguelEstimado / parseFloat(totalDeCotas)), 2);
 
     return MathValidations.FormatDecimal((aluguelEstimado / totalDeCotas), 2);    
 }
