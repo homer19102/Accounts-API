@@ -37,7 +37,7 @@ export default(mongoose) => {
             required: true
         },
         stockPrice:{
-            type: Number,
+            type: mongoose.Decimal128,
             required: true
         },
         propertyMarketValue:{

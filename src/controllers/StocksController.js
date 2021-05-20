@@ -84,6 +84,7 @@ class StocksController{
             stock.forEach(x => {
                 data.push({
                     ...x,
+                    stockPrice : parseFloat(x.stockPrice),
                     property_occupation : {
                         oneYear : x.property_occupation[0].oneYear,
                         twoYear : x.property_occupation[0].twoYear,
@@ -124,8 +125,8 @@ class StocksController{
 
 function CalculaDividendos(aluguelEstimado, totalDeCotas){
     if(!aluguelEstimado || !totalDeCotas) return null;
-
-    return MathValidations.FormatDecimal((aluguelEstimado / totalDeCotas) / 12, 2);    
+    
+    return MathValidations.FormatDecimal((aluguelEstimado / totalDeCotas), 2);    
 }
 
 
