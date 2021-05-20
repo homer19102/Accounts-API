@@ -30,6 +30,7 @@ class StocksController{
             stocks.map(item => {
                 dados.push({
                     ...item,
+                    stockPrice:  parseFloat(item.stockPrice),
                     dividend: CalculaDividendos(item.estimatedRental, item.stockPrice)
                 })
             })
@@ -125,7 +126,7 @@ class StocksController{
 
 function CalculaDividendos(aluguelEstimado, totalDeCotas){
     if(!aluguelEstimado || !totalDeCotas) return null;
-    
+
     return MathValidations.FormatDecimal((aluguelEstimado / totalDeCotas), 2);    
 }
 
