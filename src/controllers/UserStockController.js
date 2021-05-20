@@ -58,7 +58,7 @@ class UserStockController{
             await UpdateAccount(req, accountExist, stockTotalValue, next);
             await UpdateStockRequests(validStock, stockQtd, next);
 
-            return res.json("Valor " + `${ stockTotalValue } ` + " retirado da conta corrente para o investimento TESTE, efetuado com sucesso !");
+            return res.json("Valor " + `${ stockTotalValue } ` + " retirado da conta corrente para o investimento " + `${ validStock.stockDisplayName } ` + ", efetuado com sucesso !");
 
         }catch(error){
             next(error);
