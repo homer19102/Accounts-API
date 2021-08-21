@@ -10,9 +10,13 @@ import {
    loginRouter 
 } from './bank.routes.js';
 
+import authMiddleware from '../middleware/auth.js';
+
 const { Router } = express;
 
 const routes = Router();
+
+routes.use(authMiddleware);
  
 routes.use('/accounts', accountsRouter);
 
