@@ -38,6 +38,7 @@ const averageSellingPriceRouter = Router();
 const loginRouter = Router();
 
 
+
 //Accounts Router
 accountsRouter.get('/', AccountController.getAccount);
 accountsRouter.post('/NewUser/', AccountController.createAccount);
@@ -78,7 +79,7 @@ propertyRouter.post('/PostPropertyOccupation', PropertyController.PostPropertyOc
 averageSellingPriceRouter.post('/PostAverageSellingPrice', AverageSellingPriceController.PostAverageSellingPrice);
 
 //Login Router
-loginRouter.get('/', LoginController.Login);
+loginRouter.post('/', LoginController.Login);
 
 export {accountsRouter as accountsRouter,
      balanceRouter as balanceRouter,
