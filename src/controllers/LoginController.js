@@ -8,9 +8,9 @@ class LoginController {
     async Login(req, res, next){
         try{
 
-            const { cpf, senha } = req.body;
+            const { usuario, senha } = req.body;
 
-            const userExists = await Accounts.findOne( { cpf } );
+            const userExists = await Accounts.findOne( { filterName: usuario } );
 
             if(userExists === null)
                 throw new Error("Usuário não encontrado na base de dados !");
