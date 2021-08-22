@@ -30,7 +30,7 @@ class AccountController{
             const filterNameExists = await Accounts.find( { filterName } );
 
             if(filterNameExists.length === 0)
-                throw new Error("Usuário inexistente para o FilterName " +  `${filterName}`);
+                throw new Error("Usuário " +  `${filterName}` +  " inexistente favor verificar o dado digitado ! ");
 
             return res.json(filterNameExists);
 
