@@ -11,7 +11,7 @@ class BalancerController{
             const {conta, contaDestino, valor, data} = req.body;
 
             if(conta === contaDestino)
-                throw new Error("O usuário inicial não pode ser o mesmo de destino, favor verificar o dados digitado !");
+                throw new Error("O usuário inicial não pode ser o mesmo de destino, favor verificar o dado digitado !");
 
             let contaInicial = await ValidConta.validaConta(conta, next);
             let contaDestinoo = await ValidConta.validaConta(contaDestino, next);
