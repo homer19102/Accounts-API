@@ -25,14 +25,23 @@ class AccountController{
 
     async getUserFilterName(req, res, next){
         try{
-            const { filterName } = req.body;
+            const filterName = req.params.filterName;
 
             const filterNameExists = await Accounts.find( { filterName } );
 
             if(filterNameExists.length === 0)
                 throw new Error("Usuário " +  `${filterName}` +  " inexistente favor verificar o dado digitado ! ");
 
-            return res.json(filterNameExists);
+            return res.json(filterNameExists.map(item => ({
+                _id : item._id,
+                name : item.name,
+                filterName : item.filterName,
+                cpf : item.cpf,
+                email : item.email,
+                agencia : item.agencia,
+                conta : item.conta,
+                saldo : item.saldo,
+            })));
 
         }catch(error){
             next(error);
