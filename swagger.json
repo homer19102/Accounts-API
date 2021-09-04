@@ -1,0 +1,318 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "QuickBank",
+        "description": "API Integrações QuickBank",
+        "version": "1.0.0"
+    },
+    
+    "paths":{
+        "/login/": {
+            "post":{
+                "description":"teste",
+                "tags":["Login"],
+                "requestBody": {
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                               "$ref": "#/components/schemas/login"
+                            },
+                            "examples":{
+                                "Transferencia":{
+                                    "value":{
+                                        "usuario": "@userteste",
+                                        "senha": "Teste2342@@R"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "Result",
+                        "content": {
+                            "application/json" : {
+                                "schema": {
+                                    "oneOf": {
+                                        "$ref": "#/components/schemas/loginError"
+                                    },
+                                "examples":{
+                                    "error":{
+                                        "summary": "Erro",
+                                        "value":{
+                                            "errorCode": "00002",
+                                            "errorMsg": "O usuário inicial não pode ser o mesmo de destino, favor verificar o dado digitado !"
+                                        }
+                                    }
+                                }
+                              }
+                            }
+                         
+                        }
+                        
+                    },
+                    "200": {
+                        "description" : "Transferência efetuada com sucesso"
+                    }
+                }
+            }
+        },
+        "/saldo/Transfer":{
+            "put":{
+                "description":"teste",
+                "tags":["Transfer"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody": {
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                               "$ref": "#/components/schemas/Transferencia"
+                            },
+                            "examples":{
+                                "Transferencia":{
+                                    "value":{
+                                        "conta": "307486",
+                                        "contaDestino": "307485",
+                                        "valor": "75.90",
+                                        "data": "2020-08-22 10:10:21"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorizes"
+                    },
+                    "400":{
+                        "description": "O usuário inicial não pode ser o mesmo de destino, favor verificar o dado digitado !"
+                    },
+                    "200": {
+                        "description" : "Transferência efetuada com sucesso"
+                    }
+                }
+            }
+        },
+        "/accounts/GetUserFilterName/{filterName}":{
+            "get": {
+                "description": "Busca de usuário por filterName",
+                "tags": ["Accounts"],
+                "security": [ {"bearerAuth": [] }],
+                "parameters": [
+                    {
+                        "name": "filterName",
+                        "in": "path",
+                        "description": "FilterName do usuário",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "descrption": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type":"object",
+                                    "items":{
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/expenses/NewExpense":{
+            "post":{
+                "description": "Adicionar uma expense positiva ou negativa ao usuário",
+                "tags":["Expenses"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody": {
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                               "$ref": "#/components/schemas/NewExpense"
+                            },
+                            "examples":{
+                                "Transferencia":{
+                                    "value":{
+                                        "parentId": "5f5d2dfdb2f39e0c743163a9",
+	                                    "parentName" : "Bruno Freitas",
+	                                    "valor" : -100,
+	                                    "data" : "01/09/2021 11:30:00",
+	                                    "categoria": "Compras",
+	                                    "descricao": "Supermercado"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "Usuário não encontrado na base de dados"
+                    }
+                }
+            }
+        },
+        "/expenses/{userId}": {
+            "get": {
+                "description": "Busca a lista de expenses do usuário",
+                "tags": ["Expenses"],
+                "security": [ {"bearerAuth": [] }],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "Id do usuário",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "Nenhuma expense encontrada !"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ListExpenses"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components":{
+        "schemas":{
+            "Transferencia":{
+                "type": "object",
+                "properties": {
+                    "conta":{
+                        "type": "string"
+                    },
+                    "contaDestino":{
+                        "type": "string"
+                    },
+                    "valor":{
+                        "type": "string"
+                    },
+                    "data":{
+                        "type": "string"
+                    }
+                }
+            },
+            "NewExpense": {
+                "type": "object",
+                "properties": {
+                    "parentId": {
+                        "type": "string"
+                    },
+                    "parentName": {
+                        "type": "string"
+                    },
+                    "valor": {
+                        "type": "number",
+                        "multipleOf": 0.01
+                    },
+                    "data": {
+                        "type": "string"
+                    },
+                    "categoria": {
+                        "type": "string"
+                    },
+                    "descricao": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ListExpenses": {
+                "type": "object",
+                "properties": {
+                    "_id":{
+                        "type": "string"
+                    },
+                    "parentId":{
+                        "type": "string"
+                    },
+                    "parentName":{
+                        "type": "string"
+                    },
+                    "valor":{
+                        "type": "number",
+                        "multipleOf": 0.01
+                    },
+                    "data":{
+                        "type": "string"
+                    },
+                    "categoria":{
+                        "type": "string"
+                    },
+                    "descricao":{
+                        "type": "string"
+                    }
+                }
+            },
+            "login": {
+                "type": "object",
+                "properties": {
+                    "_id":{
+                        "type": "string"
+                    },
+                    "parentId":{
+                        "type": "string"
+                    },
+                    "parentName":{
+                        "type": "string"
+                    },
+                    "valor":{
+                        "type": "decimal"
+                    },
+                    "data":{
+                        "type": "string"
+                    },
+                    "categoria":{
+                        "type": "string"
+                    },
+                    "descricao":{
+                        "type": "string"
+                    }
+                }
+            },
+            "loginError":{
+                "type": "object",
+                "properties": {
+                    "errorMsg":{
+                        "type":"string",
+                        "example" : "O usuário inicial não pode ser o mesmo de destino, favor verificar o dado digitado !"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

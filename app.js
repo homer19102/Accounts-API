@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import { readFile } from 'fs/promises';
 
 import { db } from './databaseConnect.js';
 
@@ -25,6 +27,10 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+
+const swaggerDocs = JSON.parse(await readFile('./swagger.json', 'utf8'));
+
+app.use("/QuickBankApiDoc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(cors());
 

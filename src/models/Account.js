@@ -27,6 +27,14 @@ export default(mongoose) =>{
         email:{
             type: String,
             required: true
+        },
+        resetSenhaToken: {
+            type: String,
+            select: false
+        },
+        resetSenhaTokenExpiracao: {
+            type: Date,
+            select: false
         }
     });
 
