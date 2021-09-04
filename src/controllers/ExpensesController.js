@@ -60,7 +60,7 @@ class ExpensesController {
 
     async getExpensePorUsuario(req, res, next){
         try{
-            const { parentId } = req.body;
+            const parentId = req.params.userId;
 
             const expense = await expenses.find({ parentId }).sort({ data: - 1 });
 

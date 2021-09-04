@@ -7,6 +7,7 @@ import {
    stockRouter,
    propertyRouter,
    averageSellingPriceRouter,
+   passwordRouter,
    loginRouter 
 } from './bank.routes.js';
 
@@ -31,6 +32,8 @@ routes.use('/stocks', stockRouter);
 routes.use('/property', propertyRouter);
 
 routes.use('/averageSellingPriceRouter', averageSellingPriceRouter);
+
+routes.use('/password', passwordRouter);
 
 routes.use('/login', loginRouter);
 

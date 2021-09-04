@@ -18,6 +18,8 @@ import PropertyController from '../controllers/PropertyController.js';
 
 import AverageSellingPriceController from '../controllers/AverageSellingPriceController.js';
 
+import PasswordController from '../controllers/PasswordController.js';
+
 
 const { Router } = express;
 
@@ -35,6 +37,8 @@ const propertyRouter = Router();
 
 const averageSellingPriceRouter = Router();
 
+const passwordRouter = Router();
+
 const loginRouter = Router();
 
 
@@ -51,7 +55,7 @@ balanceRouter.put('/Transfer', BalancerController.Transferencia);
 
 
 //Expense Router
-expensesRouter.get('/', ExpensesController.getExpensePorUsuario);
+expensesRouter.get('/:userId', ExpensesController.getExpensePorUsuario);
 expensesRouter.post('/NewExpense', ExpensesController.AddExpense);
 expensesRouter.delete('/DeleteExpense', ExpensesController.DeleteExpense);
 expensesRouter.put('/PutExpense', ExpensesController.PutExpense);
@@ -78,6 +82,9 @@ propertyRouter.post('/PostPropertyOccupation', PropertyController.PostPropertyOc
 //Average Selling Price
 averageSellingPriceRouter.post('/PostAverageSellingPrice', AverageSellingPriceController.PostAverageSellingPrice);
 
+//Password controller
+passwordRouter.post('/ResetPassword', PasswordController.ResetPassword);
+
 //Login Router
 loginRouter.post('/', LoginController.Login);
 
@@ -87,5 +94,6 @@ export {accountsRouter as accountsRouter,
      goalsRouter as goalsRouter,
      stockRouter as stockRouter,
      loginRouter as loginRouter,
+     passwordRouter as passwordRouter,
      propertyRouter as propertyRouter,
      averageSellingPriceRouter as averageSellingPriceRouter };
