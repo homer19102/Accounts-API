@@ -9,14 +9,14 @@ class GoalsController {
     async GetGoals(req, res ,next){
         try{
 
-            const { parentId } = req.body;
+            const userId = req.params.userId;
 
-            const userExists = await Accounts.findOne( {_id : parentId });
+            const userExists = await Accounts.findOne( {_id : userId });
 
             if(userExists === null)
                 throw new Error("Usuário não encontrado na base de dados !");
 
-            const goalsUser = await goals.find({ parentId }).sort({ data: - 1 });
+            const goalsUser = await goals.find({ parentId : userId }).sort({ data: - 1 });
 
             return res.json(goalsUser);
 
