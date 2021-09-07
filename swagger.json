@@ -199,6 +199,51 @@
                     }
                 }
             }
+        },
+        "/goals/UpdateTargetValue" : {
+            "put" : {
+                "description": "Atualiza o valor total da meta desejada",
+                "tags":["Goals"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref": "#/components/schemas/UpdateTotalValueGoal"
+                            }
+                        },
+                        "examples":{
+                            "UpdateTotalValueGoal":{
+                                "value":{
+                                    "goalId": "6122c3a5b005a50216500f16",
+                                    "valor" : 1000
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "O valor não pode ser negativo ou zero !",
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/components/schemas/UpdateTotalValueGoal"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/UpdateTotalValueGoal"
+                                }
+                            ]
+                        }
+                    },
+                    "200": {
+                        "description" : "Valor da meta atualizado com sucesso !"
+                    }
+                }
+            }
         }
     },
     "components":{
@@ -303,6 +348,18 @@
                     "errorMsg":{
                         "type":"string",
                         "example" : "O usuário inicial não pode ser o mesmo de destino, favor verificar o dado digitado !"
+                    }
+                }
+            },
+            "UpdateTotalValueGoal": {
+                "type": "object",
+                "properties": {
+                    "goalId": {
+                        "type": "string"
+                    },
+                    "valor": {
+                        "type": "number",
+                        "multipleOf": 0.01
                     }
                 }
             }

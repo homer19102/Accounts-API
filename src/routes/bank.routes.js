@@ -65,6 +65,7 @@ goalsRouter.post('/NewGoal', GoalsController.PostGoal);
 goalsRouter.put('/TransferToGoal', GoalsController.PutTransferToGoal);
 goalsRouter.delete('/DeleteGoal', GoalsController.DeleteGoal);
 goalsRouter.get('/GetGoalsUser', GoalsController.GetGoals);
+goalsRouter.put('/UpdateTargetValue', GoalsController.PutValueGoal);
 
 //Stocks Router
 stockRouter.post('/NewStock', StocksController.PostStock);

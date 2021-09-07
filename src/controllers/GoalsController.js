@@ -140,6 +140,37 @@ class GoalsController {
             next(error);
         }
     }
+
+    async PutValueGoal(req, res, next){
+        try{
+
+            const {goalId, valor} = req.body;
+
+            let goal =  await goals.findOne( { _id : goalId });
+
+            if(!goal)
+                throw new Error("Goal não encontrada na base de dados !");
+
+            const tipoValor = Math.sign(valor);
+
+            if(tipoValor === -1 || tipoValor === 0)
+                throw new Error("O valor não pode ser negativo ou zero !");
+
+            if(goal.valueGoal === valor)
+                throw new Error("O valor a ser atualizado deve ser diferente do valor atual da meta ! ");
+
+            goal.valueGoal = valor;
+
+            goal = new goals(goal);
+
+            goal.save();
+
+            res.json("Valor da meta atualizado com sucesso !");
+
+        }catch(error){
+            next(error);
+        }
+    }
 };
 
 export default new GoalsController();
