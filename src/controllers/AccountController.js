@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import ValidEmail from '../utils/ValidEmail.js';
 import ValidCpf from '../utils/ValidCPF.js';
 import ValidPassword from '../utils/ValidSenha.js';
+import StringFormat from '../utils/StringFormat.js';
 
 const Accounts = db.accounts;
 const AccountsSequence = db.accountSequence;
@@ -36,7 +37,7 @@ class AccountController{
                 _id : item._id,
                 name : item.name,
                 filterName : item.filterName,
-                cpf : item.cpf,
+                cpf : StringFormat.ReplaceCharacter(4,10,StringFormat.FormatCpf(item.cpf), '*'),
                 email : item.email,
                 agencia : item.agencia,
                 conta : item.conta,
