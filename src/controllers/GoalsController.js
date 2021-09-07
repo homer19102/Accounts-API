@@ -144,7 +144,7 @@ class GoalsController {
     async PutValueGoal(req, res, next){
         try{
 
-            const {goalId, valor} = req.body;
+            const { goalId, valor } = req.body;
 
             let goal =  await goals.findOne( { _id : goalId });
 
@@ -166,6 +166,47 @@ class GoalsController {
             goal.save();
 
             res.json("Valor da meta atualizado com sucesso !");
+
+        }catch(error){
+            next(error);
+        }
+    }
+
+    async PostRemoveValueGoal(req, res, next){
+        try{
+            const { goalId, userId, valor } = req.body;
+
+            if(valor <= 0)
+                throw new Error("O valor informado deve ser maior que 0 !");
+
+            let goal = await goals.findOne( { _id: goalId });
+            let conta  = await Accounts.findOne( { _id: userId } ); 
+            
+            if(!goal)
+                throw new Error("Goal não encontrada na base de dados !");
+
+            if(!conta)
+                throw new Error("Conta não encontrada na base de dados !");
+
+            if(conta.id !== goal.parentId)
+                throw new Error("A conta a ser creditada não pertence ao usuário !");
+
+            if(goal.currentGoalValue < valor)
+                throw new Error("O valor a ser retirado da meta excede o valor diponível favor verificar o dado digitado !");
+
+            conta.saldo += valor;
+
+            goal.currentGoalValue -= valor;
+
+            goal.currentGoalValue = (Math.round(goal.currentGoalValue * 100) / 100);
+
+            conta = new Accounts(conta);
+            goal = new goals(goal);
+
+            conta.save();
+            goal.save();
+
+            return res.json("Valor removido da meta com sucesso ! ");
 
         }catch(error){
             next(error);

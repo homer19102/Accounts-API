@@ -227,20 +227,46 @@
                         "description": "Unauthorized"
                     },
                     "400":{
-                        "description": "O valor não pode ser negativo ou zero !",
-                        "schema": {
-                            "oneOf": [
-                                {
-                                    "$ref": "#/components/schemas/UpdateTotalValueGoal"
-                                },
-                                {
-                                    "$ref": "#/components/schemas/UpdateTotalValueGoal"
-                                }
-                            ]
-                        }
+                        "description": "O valor não pode ser negativo ou zero !"
                     },
                     "200": {
                         "description" : "Valor da meta atualizado com sucesso !"
+                    }
+                }
+            }
+        },
+        "/goals/RemoveValue" : {
+            "post" : {
+                "description" : "Remove o valor desejado da meta e adiciona a conta corrente do usuário",
+                "tags":["Goals"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref": "#/components/schemas/RemoveValueGoal"
+                            }
+                        },
+                        "examples":{
+                            "RemoveValueGoal":{
+                                "value":{
+                                    "goalId": "6122c3a5b005a50216500f16",
+                                    "userId": "6123830a13e23200165885a4",
+                                    "valor" : 1000
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "O valor a ser retirado da meta excede o valor diponível favor verificar o dado digitado !"
+                    },
+                    "200": {
+                        "description" : "Valor removido da meta com sucesso !"
                     }
                 }
             }
@@ -356,6 +382,21 @@
                 "properties": {
                     "goalId": {
                         "type": "string"
+                    },
+                    "valor": {
+                        "type": "number",
+                        "multipleOf": 0.01
+                    }
+                }
+            },
+            "RemoveValueGoal" : {
+                "type" : "object",
+                "properties" : {
+                    "goalId" : {
+                        "type" : "string"
+                    },
+                    "userId" : {
+                        "type" : "string"
                     },
                     "valor": {
                         "type": "number",
