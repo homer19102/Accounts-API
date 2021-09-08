@@ -41,7 +41,7 @@ class AccountController{
                 email : item.email,
                 agencia : item.agencia,
                 conta : item.conta,
-                saldo : item.saldo,
+                saldo : (Math.round(item.saldo * 100) / 100)
             })));
 
         }catch(error){
@@ -51,7 +51,7 @@ class AccountController{
 
     async createAccount(req, res, next){
         try{
-            const {name, senha, cpf , email, saldo, userFilter} = req.body;
+            const { name, senha, cpf , email, userFilter } = req.body;
 
             let validCpf = await ValidCpf.validCpf(cpf);
 
@@ -98,7 +98,7 @@ class AccountController{
                     email,
                     agencia : sequence.agencia,
                     conta : sequence.conta,
-                    saldo
+                    saldo : 0
                 });
 
                 sequence.conta++
@@ -106,7 +106,7 @@ class AccountController{
                 sequence = new AccountsSequence(sequence);
             
                 sequence.save();
-                
+ 
                 return res.json(newAccount);
             }
         }catch(error){
