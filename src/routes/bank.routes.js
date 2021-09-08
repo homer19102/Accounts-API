@@ -64,7 +64,9 @@ expensesRouter.put('/PutExpense', ExpensesController.PutExpense);
 goalsRouter.post('/NewGoal', GoalsController.PostGoal);
 goalsRouter.put('/TransferToGoal', GoalsController.PutTransferToGoal);
 goalsRouter.delete('/DeleteGoal', GoalsController.DeleteGoal);
-goalsRouter.get('/GetGoalsUser', GoalsController.GetGoals);
+goalsRouter.get('/GetGoalsUser/:userId', GoalsController.GetGoals);
+goalsRouter.put('/UpdateTargetValue', GoalsController.PutValueGoal);
+goalsRouter.post('/RemoveValue', GoalsController.PostRemoveValueGoal);
 
 //Stocks Router
 stockRouter.post('/NewStock', StocksController.PostStock);

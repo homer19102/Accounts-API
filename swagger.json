@@ -98,7 +98,7 @@
                 }
             }
         },
-        "/accounts/GetUserFilterName/{filterName}":{
+        "/accounts/GetUserFilterName/{filterName}": {
             "get": {
                 "description": "Busca de usuário por filterName",
                 "tags": ["Accounts"],
@@ -112,18 +112,58 @@
                     }
                 ],
                 "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "Usuário inexistente !"
+                    },
                     "200": {
-                        "descrption": "OK",
+                        "description": "OK",
                         "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type":"object",
-                                    "items":{
-
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
                                     }
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/accounts/NewUser" : {
+            "post" : {
+                "description": "Cria um novo usuário",
+                "tags": ["Accounts"],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref": "#/components/schemas/NewAccount"
+                            }
+                        },
+                        "examples":{
+                            "NewAccount":{
+                                "value":{
+                                    "name": "Bruno Freitas",
+                                    "userFilter" : "brunofreitas",
+                                    "senha": "afsawqs@12376",
+                                    "cpf" : "07799309083",
+                                    "email" : "bruno@gmail.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "400":{
+                        "description": "Usuário já existente"
+                    },
+                    "200": {
+                        "description" : "OK"
                     }
                 }
             }
@@ -196,6 +236,217 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/goals/UpdateTargetValue" : {
+            "put" : {
+                "description": "Atualiza o valor total da meta desejada",
+                "tags":["Goals"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref": "#/components/schemas/UpdateTotalValueGoal"
+                            }
+                        },
+                        "examples":{
+                            "UpdateTotalValueGoal":{
+                                "value":{
+                                    "goalId": "6122c3a5b005a50216500f16",
+                                    "valor" : 1000
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "O valor não pode ser negativo ou zero !"
+                    },
+                    "200": {
+                        "description" : "Valor da meta atualizado com sucesso !"
+                    }
+                }
+            }
+        },
+        "/goals/RemoveValue" : {
+            "post" : {
+                "description" : "Remove o valor desejado da meta e adiciona a conta corrente do usuário",
+                "tags":["Goals"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref": "#/components/schemas/RemoveValueGoal"
+                            }
+                        },
+                        "examples":{
+                            "RemoveValueGoal":{
+                                "value":{
+                                    "goalId": "6122c3a5b005a50216500f16",
+                                    "userId": "6123830a13e23200165885a4",
+                                    "valor" : 1000
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "O valor a ser retirado da meta excede o valor diponível favor verificar o dado digitado !"
+                    },
+                    "200": {
+                        "description" : "Valor removido da meta com sucesso !"
+                    }
+                }
+            }
+        },
+        "/goals/NewGoal" : {
+            "post" : {
+                "description" : "Adiciona uma nova meta ao usuário",
+                "tags" : ["Goals"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref" :  "#/components/schemas/NewGoal"
+                            }
+                        },
+                        "examples":{
+                            "NewGoal":{
+                                "value":{
+                                    "parentId": "6122c3a5b005a50216500f16",
+                                    "parentName": "@teste",
+                                    "nameGoal": "Comprar Celular",
+                                    "valor" : 1000
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "Usuário não encontrado na base de dados !"
+                    }
+                }
+            }
+        },
+        "/goals/DeleteGoal" : {
+            "delete" : {
+                "description" : "Deleta a meta do usuário",
+                "tags" : ["Goals"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref" :  "#/components/schemas/DeleteGoal"
+                            }
+                        },
+                        "examples":{
+                            "DeleteGoal":{
+                                "value":{
+                                    "_id": "6122c3a5b005a50216500f16"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "Meta não encontrada na base de dados !"
+                    },
+                    "200": {
+                        "description" : "Meta excluída com sucesso"
+                    }
+                }
+            }
+        },
+        "/goals/GetGoalsUser/{userId}" : {
+            "get": {
+                "description": "Busca a lista de metas do usuário",
+                "tags": ["Goals"],
+                "security": [ {"bearerAuth": [] }],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "Id do usuário",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "Usuário não encontrado na base de dados !"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ListGoals"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/goals/TransferToGoal" : {
+            "put" : {
+                "description": "Atualiza a meta com transferência da conta corrente do usuário",
+                "tags":["Goals"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "$ref": "#/components/schemas/TransferToGoal"
+                            }
+                        },
+                        "examples":{
+                            "TransferToGoal":{
+                                "value":{
+                                    "_id": "5fac5938cf15b30027a003f3",
+                                    "valor" : 1000,
+                                    "conta": "254514"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "Saldo insuficiente para executar a ação !"
+                    },
+                    "200": {
+                        "description" : "Transferência efetuada com sucesso !"
                     }
                 }
             }
@@ -303,6 +554,149 @@
                     "errorMsg":{
                         "type":"string",
                         "example" : "O usuário inicial não pode ser o mesmo de destino, favor verificar o dado digitado !"
+                    }
+                }
+            },
+            "UpdateTotalValueGoal": {
+                "type": "object",
+                "properties": {
+                    "goalId": {
+                        "type": "string"
+                    },
+                    "valor": {
+                        "type": "number",
+                        "multipleOf": 0.01
+                    }
+                }
+            },
+            "RemoveValueGoal" : {
+                "type" : "object",
+                "properties" : {
+                    "goalId" : {
+                        "type" : "string"
+                    },
+                    "userId" : {
+                        "type" : "string"
+                    },
+                    "valor": {
+                        "type": "number",
+                        "multipleOf": 0.01
+                    }
+                }
+            },
+            "NewGoal" : {
+                "type" : "object",
+                "properties" : {
+                    "parentId" : {
+                        "type" : "string"
+                    },
+                    "parentName" : {
+                        "type" : "string"
+                    },
+                    "nameGoal" : {
+                        "type" : "string"
+                    },
+                    "valueGoal": {
+                        "type": "number",
+                        "multipleOf": 0.01
+                    }
+                }
+            },
+            "DeleteGoal" : {
+                "type" : "object",
+                "properties" : {
+                    "_id" : {
+                        "type" : "string"
+                    }
+                }
+            },
+            "ListGoals" : {
+                "type": "object",
+                "properties": {
+                    "_id":{
+                        "type": "string"
+                    },
+                    "parentId":{
+                        "type": "string"
+                    },
+                    "parentName":{
+                        "type": "string"
+                    },
+                    "nameGoal":{
+                        "type": "string"
+                    },
+                    "valueGoal":{
+                        "type": "number",
+                        "multipleOf": 0.01
+                    },
+                    "currentGoalValue":{
+                        "type": "number",
+                        "multipleOf": 0.01
+                    }
+                }
+            },
+            "TransferToGoal" : {
+                "type": "object",
+                "properties": {
+                    "_id":{
+                        "type": "string"
+                    },
+                    "value":{
+                        "type": "number",
+                        "multipleOf": 0.01
+                    },
+                    "conta":{
+                        "type": "string"
+                    }
+                }
+            },
+            "User" : {
+                "type": "object",
+                "properties": {
+                    "_id":{
+                        "type": "string"
+                    },
+                    "name":{
+                        "type": "string"
+                    },
+                    "filterName":{
+                        "type": "string"
+                    },
+                    "cpf":{
+                        "type": "string"
+                    },
+                    "email":{
+                        "type": "string"
+                    },
+                    "agencia":{
+                        "type": "string"
+                    },
+                    "conta":{
+                        "type": "string"
+                    },
+                    "saldo":{
+                        "type": "number",
+                        "multipleOf": 0.01
+                    }
+                }
+            },
+            "NewAccount" : {
+                "type": "object",
+                "properties": {
+                    "name":{
+                        "type": "string"
+                    },
+                    "userFilter":{
+                        "type": "string"
+                    },
+                    "senha":{
+                        "type": "string"
+                    },
+                    "cpf":{
+                        "type": "string"
+                    },
+                    "email":{
+                        "type": "string"
                     }
                 }
             }
