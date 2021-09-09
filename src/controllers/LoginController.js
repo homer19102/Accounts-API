@@ -20,7 +20,7 @@ class LoginController {
                 throw new Error("Senha ou usuário incorretos !");
 
             const token = jwt.sign( { id: userExists._id }, process.env.SECRET, {
-                expiresIn: 86400,
+                expiresIn: 1,
             });
 
             return res.json({
