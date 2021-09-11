@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 export default (req, res, next) => {
     const authHeader = req.headers.authorization;
 
-    if(req.originalUrl === '/login/' || req.originalUrl === '/accounts/NewUser' || req.originalUrl === '/password/ResetPassword' )
+    if(req.originalUrl === '/login/' || req.originalUrl === '/accounts/NewUser' || req.originalUrl === '/password/ResetPassword' || req.originalUrl === '/refreshToken/NewToken' )
         return next();
 
     if(!authHeader)

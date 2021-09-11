@@ -23,7 +23,15 @@ class LoginController {
                 expiresIn: 3600,
             });
 
-            return res.json({
+            const refreshToken = jwt.sign( { id: userExists.id }, process.env.REFRESHTOKENSECRET, {
+                expiresIn: 604800,
+            });
+
+
+            res.cookie('refreshToken', refreshToken);
+            res.cookie('user', userExists._id);
+
+            res.json({
                  _id : userExists._id,
                  name : userExists.name,
                  filterName : userExists.filterName,
@@ -34,6 +42,8 @@ class LoginController {
                  saldo : userExists.saldo,
                  token: token
             });
+
+            return res;
          
         }catch(error){
             next(error);

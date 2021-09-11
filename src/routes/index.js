@@ -8,7 +8,8 @@ import {
    propertyRouter,
    averageSellingPriceRouter,
    passwordRouter,
-   loginRouter 
+   loginRouter,
+   refreshTokenRouter
 } from './bank.routes.js';
 
 import authMiddleware from '../middleware/auth.js';
@@ -18,7 +19,7 @@ const { Router } = express;
 const routes = Router();
 
 routes.use(authMiddleware);
- 
+
 routes.use('/accounts', accountsRouter);
 
 routes.use('/saldo', balanceRouter);
@@ -34,6 +35,8 @@ routes.use('/property', propertyRouter);
 routes.use('/averageSellingPriceRouter', averageSellingPriceRouter);
 
 routes.use('/password', passwordRouter);
+
+routes.use('/refreshToken', refreshTokenRouter);
 
 routes.use('/login', loginRouter);
 
