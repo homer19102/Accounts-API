@@ -87,6 +87,7 @@ averageSellingPriceRouter.post('/PostAverageSellingPrice', AverageSellingPriceCo
 
 //Password controller
 passwordRouter.post('/ResetPassword', PasswordController.ResetPassword);
+passwordRouter.post('/NewPassword', PasswordController.NewPassword);
 
 //Refresh Token
 refreshTokenRouter.post('/NewToken', RefreshTokenController.NewToken);

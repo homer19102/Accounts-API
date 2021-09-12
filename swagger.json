@@ -61,6 +61,68 @@
                 }
             }
         },
+        "/password/ResetPassword" : {
+            "post" : {
+                "description" : "Gera o reset de senha do usuário e envia o e-mail com o link de redefinição",
+                "tags" : ["Password"],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema":{
+                                "$ref": "#/components/schemas/ResetPassword"
+                             }
+                        },
+                        "examples":{
+                            "ResetPassword":{
+                                "value":{
+                                    "user": "userTeste"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200": {
+                        "description": "true"
+                    },
+                    "400":{
+                        "description": "Usuário inexistente !"
+                    }
+                }
+            }
+        },
+        "/password/NewPassword" : {
+            "post" : {
+                "description" : "Gera a nova senha do usuário",
+                "tags" : ["Password"],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema":{
+                                "$ref": "#/components/schemas/NewPassword"
+                             }
+                        },
+                        "examples":{
+                            "ResetPassword":{
+                                "value":{
+                                    "email" : "email@gmail.com",
+                                    "senha" : "4578451@Fg",
+                                    "token" : "6a5ae858c38c6fea58cc17ab0fed60d1d779930c"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200": {
+                        "description": "Senha Alterada Com Sucesso !"
+                    },
+                    "400":{
+                        "description": "Token expirado !"
+                    }
+                }
+            }
+        },
         "/saldo/Transfer":{
             "put":{
                 "description":"teste",
@@ -694,6 +756,28 @@
                     "email":{
                         "type": "string"
                     }
+                }
+            },
+            "ResetPassword" : {
+                "type" : "object",
+                "properties" : {
+                    "user" : {
+                        "type" : "string"
+                    } 
+                }
+            },
+            "NewPassword" : {
+                "type" : "object",
+                "properties" : {
+                    "email" : {
+                        "type" : "string"
+                    },
+                    "senha" : {
+                        "type" : "string"
+                    },
+                    "token" : {
+                        "type" : "string"
+                    } 
                 }
             }
         },
