@@ -77,8 +77,7 @@
                                     "value":{
                                         "conta": "307486",
                                         "contaDestino": "307485",
-                                        "valor": "75.90",
-                                        "data": "2020-08-22 10:10:21"
+                                        "valor": "75.90"
                                     }
                                 }
                             }
@@ -464,9 +463,6 @@
                         "type": "string"
                     },
                     "valor":{
-                        "type": "string"
-                    },
-                    "data":{
                         "type": "string"
                     }
                 }

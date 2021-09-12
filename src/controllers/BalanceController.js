@@ -1,5 +1,6 @@
 import { db } from '../../databaseConnect.js';
 import ValidConta from '../utils/ValidConta.js';
+import { format } from 'date-fns';
 
 const expenses = db.expenses;
 const Accounts = db.accounts;
@@ -9,6 +10,8 @@ class BalancerController{
         try{
 
             const {conta, contaDestino, valor, data} = req.body;
+
+            const dateFormat = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
             if(conta === contaDestino)
                 throw new Error("O usuário inicial não pode ser o mesmo de destino, favor verificar o dado digitado !");
@@ -40,7 +43,7 @@ class BalancerController{
                 parentId : contaInicial._id,
                 parentName : contaInicial.filterName,
                 valor : valorNegativo,
-                data : data,
+                data : dateFormat,
                 categoria : "Receita",
                 descricao: "Transferência",
                 targetUser: contaDestinoo.filterName
@@ -51,7 +54,7 @@ class BalancerController{
                 parentId : contaDestinoo._id,
                 parentName : contaDestinoo.filterName,
                 valor : valor,
-                data : data,
+                data : dateFormat,
                 categoria : "Receita",
                 descricao: "Transferência",
                 targetUser : contaInicial.filterName
