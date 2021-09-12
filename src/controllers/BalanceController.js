@@ -24,13 +24,16 @@ class BalancerController{
             if(tipoExpense === -1 || tipoExpense === 0)
                 throw new Error("O valor não pode ser negativo ou zero !");
 
-            let valorNegativo = valor * -1;
+            let valorNegativo = valor * -1;    
             contaInicial.saldo -= valor;
             if(contaInicial.saldo < 0){
                 throw new Error("Saldo insuficiente para completar a operação !");
             }
 
             contaDestinoo.saldo += valor;
+
+            contaInicial.saldo = (Math.round(contaInicial.saldo  * 100) / 100);
+            contaDestinoo.saldo = (Math.round(contaDestinoo.saldo  * 100) / 100);
 
             contaInicial = new Accounts(contaInicial);
             contaInicial.save();
