@@ -1,6 +1,8 @@
 import { db } from '../../databaseConnect.js';
 import ValidConta from '../utils/ValidConta.js';
+import mailer from '../modules/mailer.js';
 import { format } from 'date-fns';
+import StringFormat from '../utils/StringFormat.js';
 
 const expenses = db.expenses;
 const Accounts = db.accounts;
@@ -12,6 +14,8 @@ class BalancerController{
             const {conta, contaDestino, valor, data} = req.body;
 
             const dateFormat = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+
+            const formatValue = valor.toLocaleString('pt-br', {minimumFractionDigits: 2});
 
             if(conta === contaDestino)
                 throw new Error("O usuário inicial não pode ser o mesmo de destino, favor verificar o dado digitado !");
@@ -62,6 +66,19 @@ class BalancerController{
                 descricao: "Transferência",
                 targetUser : contaInicial.filterName
             });
+
+    // Somente descomentar para a apresentação do projeto
+        /*     await mailer.sendMail({
+                to: contaInicial.email,
+                from: "no-reply@victornfb.com",
+                subject: "QuickBank - Transferência Realizada Com Sucesso",
+                template: "auth/transfer",
+                context: { user: contaInicial.filterName,
+                    destinyUser: contaDestinoo.filterName,
+                    name: contaDestinoo.name,
+                    document: StringFormat.ReplaceCharacter(4,10,StringFormat.FormatCpf(contaDestinoo.cpf), '*'),
+                    value: formatValue },
+            }) */
 
             return res.json("Transferência efetuada com sucesso para " + `${contaDestinoo.name } ` + "seu saldo atual é " + `${contaInicial.saldo}`);
 
