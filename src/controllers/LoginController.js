@@ -10,7 +10,7 @@ class LoginController {
 
             const { usuario, senha } = req.body;
 
-            const userExists = await Accounts.findOne( { filterName: usuario } );
+            const userExists = await Accounts.findOne( { filterName: usuario.toLowerCase() } );
 
             if(userExists === null)
                 throw new Error("Usuário não encontrado na base de dados !");

@@ -14,7 +14,7 @@ class PasswordController{
 
             const { user } = req.body;
 
-            const userExists = await Accounts.findOne( { filterName: `${"@"}${user}` } );
+            const userExists = await Accounts.findOne( { filterName: `${"@"}${user.toLowerCase()}` } );
     
             if(!userExists)
                 throw new Error("Usuário inexistente !");

@@ -80,7 +80,9 @@ class BalancerController{
                     value: formatValue },
             }) */
 
-            return res.json("Transferência efetuada com sucesso para " + `${contaDestinoo.name } ` + "seu saldo atual é " + `${contaInicial.saldo}`);
+            const saldoFormatado = contaInicial.saldo.toLocaleString('pt-br', {minimumFractionDigits: 2})
+
+            return res.json("Transferência efetuada com sucesso para " + `${contaDestinoo.name } ` + "seu saldo atual é R$ " + `${saldoFormatado}`);
 
         }catch(error){
             next(error);
