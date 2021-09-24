@@ -68,6 +68,9 @@ class AccountController{
             if(!validEmail)
                 throw new Error("E-mail informado está fora do padrão ! Tente novamente");
 
+            if(!StringFormat.ValidUser(userFilter))
+                throw new Error("O usuário não pode conter caracteres especiais !");
+
             let filterName = `${"@"}${userFilter.toLowerCase()}`;
 
             const password = await bcrypt.hash(senha, 10);

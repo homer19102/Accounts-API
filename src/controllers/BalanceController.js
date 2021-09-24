@@ -68,7 +68,7 @@ class BalancerController{
             });
 
     // Somente descomentar para a apresentação do projeto
-        /*     await mailer.sendMail({
+             await mailer.sendMail({
                 to: contaInicial.email,
                 from: "no-reply@victornfb.com",
                 subject: "QuickBank - Transferência Realizada Com Sucesso",
@@ -78,7 +78,7 @@ class BalancerController{
                     name: contaDestinoo.name,
                     document: StringFormat.ReplaceCharacter(4,10,StringFormat.FormatCpf(contaDestinoo.cpf), '*'),
                     value: formatValue },
-            }) */
+            }) 
 
             const saldoFormatado = contaInicial.saldo.toLocaleString('pt-br', {minimumFractionDigits: 2})
 

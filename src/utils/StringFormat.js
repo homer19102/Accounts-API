@@ -23,6 +23,16 @@ class StringFormat{
 
         return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
     }
+
+    ValidUser(text){
+        const format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+
+        if(format.test(text))
+            return false;
+       
+        return true;
+      
+    }
 }
 
 export default new StringFormat();
