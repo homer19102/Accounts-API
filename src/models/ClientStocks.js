@@ -16,7 +16,7 @@ export default(mongoose) => {
             required: true
         },
         NumberOfStocks:{
-            type: String,
+            type: Number,
             required: true
         },
         totalValue:{

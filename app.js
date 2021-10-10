@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
+import cookieParser from 'cookie-parser';
 
 import { db } from './databaseConnect.js';
 
@@ -27,6 +28,8 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 const swaggerDocs = JSON.parse(await readFile('./swagger.json', 'utf8'));
 

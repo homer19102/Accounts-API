@@ -61,6 +61,68 @@
                 }
             }
         },
+        "/password/ResetPassword" : {
+            "post" : {
+                "description" : "Gera o reset de senha do usuário e envia o e-mail com o link de redefinição",
+                "tags" : ["Password"],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema":{
+                                "$ref": "#/components/schemas/ResetPassword"
+                             }
+                        },
+                        "examples":{
+                            "ResetPassword":{
+                                "value":{
+                                    "user": "userTeste"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200": {
+                        "description": "true"
+                    },
+                    "400":{
+                        "description": "Usuário inexistente !"
+                    }
+                }
+            }
+        },
+        "/password/NewPassword" : {
+            "post" : {
+                "description" : "Gera a nova senha do usuário",
+                "tags" : ["Password"],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema":{
+                                "$ref": "#/components/schemas/NewPassword"
+                             }
+                        },
+                        "examples":{
+                            "ResetPassword":{
+                                "value":{
+                                    "email" : "email@gmail.com",
+                                    "senha" : "4578451@Fg",
+                                    "token" : "6a5ae858c38c6fea58cc17ab0fed60d1d779930c"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200": {
+                        "description": "Senha Alterada Com Sucesso !"
+                    },
+                    "400":{
+                        "description": "Token expirado !"
+                    }
+                }
+            }
+        },
         "/saldo/Transfer":{
             "put":{
                 "description":"teste",
@@ -77,8 +139,7 @@
                                     "value":{
                                         "conta": "307486",
                                         "contaDestino": "307485",
-                                        "valor": "75.90",
-                                        "data": "2020-08-22 10:10:21"
+                                        "valor": "75.90"
                                     }
                                 }
                             }
@@ -450,6 +511,115 @@
                     }
                 }
             }
+        },
+        "/stocks/GetUserStocks/{userId}" : {
+            "get" : {
+                "description": "Busca a lista de investimento do usuário",
+                "tags": ["ClientStocks"],
+                "security": [ {"bearerAuth": [] }],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "Id do usuário",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "Não encontrado nenhum investimento na base de dados !"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ListUserStocks"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/stocks/PostStockUserAccount" : {
+           "post": {
+            "description": "Realiza a compra das ações utilizando o saldo da conta corrente do usuário",
+            "tags":["ClientStocks"],
+            "security": [ {"bearerAuth": [] }],
+            "requestBody" : {
+                "content" : {
+                    "application/json" : {
+                        "schema":{
+                            "$ref": "#/components/schemas/NewStockUser"
+                         },
+                         "examples":{
+                            "NewStockUser":{
+                                "value":{
+                                    "parentId": "5f5d2dfdb2f39e0c743163a9",
+                                    "stockId" : "608db860edc9160017d21f",
+                                    "stockQtd" : 10
+                                }
+                            }
+                        }
+                    }
+                }
+              },
+              "responses":{
+                "401": {
+                    "description": "Unauthorized"
+                },
+                "400":{
+                    "description": "A quantidade solicitada para compra excede a quantidade disponível de stocks"
+                },
+                "200": {
+                    "description": "Valor retirado da conta corrente para o investimento, efetuado com sucesso !"
+                }
+           }
+        }
+        },
+        "/stocks/PostStockUserGoal" : {
+            "post" : {
+                "description": "Realiza a compra das ações utilizando o a meta escolhida pelo usuário",
+                "tags":["ClientStocks"],
+                "security": [ {"bearerAuth": [] }],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema":{
+                                "$ref": "#/components/schemas/NewStockUserGoal"
+                             },
+                             "examples":{
+                                "NewStockUserGoal":{
+                                    "value":{
+                                        "goalId" : "5fadcc07807878f50176994b3",
+                                        "parentId": "5f5d2dfdb2f39e0c743163a9",
+                                        "stockId" : "608db860edc9160017d21f",
+                                        "stockQtd" : 10
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400":{
+                        "description": "A quantidade solicitada para compra excede a quantidade disponível de stocks"
+                    },
+                    "200": {
+                        "description": "Valor retirado da meta para o investimento, efetuado com sucesso !"
+                    }
+                }
+            }
         }
     },
     "components":{
@@ -464,9 +634,6 @@
                         "type": "string"
                     },
                     "valor":{
-                        "type": "string"
-                    },
-                    "data":{
                         "type": "string"
                     }
                 }
@@ -697,6 +864,77 @@
                     },
                     "email":{
                         "type": "string"
+                    }
+                }
+            },
+            "ResetPassword" : {
+                "type" : "object",
+                "properties" : {
+                    "user" : {
+                        "type" : "string"
+                    } 
+                }
+            },
+            "NewPassword" : {
+                "type" : "object",
+                "properties" : {
+                    "email" : {
+                        "type" : "string"
+                    },
+                    "senha" : {
+                        "type" : "string"
+                    },
+                    "token" : {
+                        "type" : "string"
+                    } 
+                }
+            },
+            "ListUserStocks" : {
+                "type": "object",
+                "properties": {
+                    "_id":{
+                        "type": "string"
+                    },
+                    "stockDisplayName":{
+                        "type": "string"
+                    },
+                    "numberOfStocks":{
+                        "type": "number"
+                    },
+                    "totalInvestment":{
+                        "type": "number",
+                        "multipleOf": 0.01
+                    }
+                }
+            },
+            "NewStockUser" : {
+                "type" : "object",
+                "properties" : {
+                    "parentId" : {
+                        "type" : "string"
+                    },
+                    "stockId" : {
+                        "type" : "string"
+                    },
+                    "stockQtd" : {
+                        "type" : "number"
+                    }
+                }
+            },
+            "NewStockUserGoal" : {
+                "type" : "object",
+                "properties" : {
+                    "goalId" : {
+                        "type" : "string"
+                    },
+                    "parentId" : {
+                        "type" : "string"
+                    },
+                    "stockId" : {
+                        "type" : "string"
+                    },
+                    "stockQtd" : {
+                        "type" : "number"
                     }
                 }
             }

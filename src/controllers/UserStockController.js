@@ -2,6 +2,7 @@ import { db } from '../../databaseConnect.js';
 import GoalsController from './GoalsController.js';
 import MathValidations from '../utils/MathValidations.js';
 import ValidStock from '../utils/ValidStock.js';
+import DateTime from '../utils/DateTime.js';
 
 const expenses = db.expenses;
 const Accounts = db.accounts;
@@ -12,17 +13,17 @@ const stock = db.stockmarketplace;
 class UserStockController{
     async AddUserStockGoal(req, res, next){
         try{
-            const { stockId, stockQtd, stockPrice} = req.body;
+            const { stockId, stockQtd } = req.body;
 
-            let validStock = await ValidStock.validaStock(stockId, next);
+            let validStock = await ValidStock.ValidaStock(stockId, next);
 
             if(!validStock)
                 return;
 
-            //if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
-              //  return null;
+            if(validStock.numberShares - validStock.numberOfRequests < stockQtd)
+                throw new Error("A quantidade solicitada para compra excede a quantidade disponível de stocks");
 
-            const stockTotalValue = stockPrice * stockQtd
+            const stockTotalValue = validStock.stockPrice * stockQtd;
 
             const goal = await UpdateGoal(req, next, stockTotalValue, validStock);
             await UpdateStockRequests(validStock, stockQtd, next);
@@ -37,18 +38,17 @@ class UserStockController{
 
     async AddUserStockAccount(req, res, next){
         try{
-            const { stockId, parentId, stockQtd, stockPrice } = req.body;
+            const { stockId, parentId, stockQtd } = req.body;
 
-            let validStock = await ValidStock.validaStock(stockId, next);
+            let validStock = await ValidStock.ValidaStock(stockId, next);
 
             if(!validStock)
                 return;
             
-            
-           // if(!await ValidStock.validaQuantidade(stockId, stockQtd, next))
-             //   return null;
+            if(validStock.numberShares - validStock.numberOfRequests < stockQtd)
+                throw new Error("A quantidade solicitada para compra excede a quantidade disponível de stocks");
 
-            const stockTotalValue = stockPrice * stockQtd
+            const stockTotalValue = validStock.stockPrice * stockQtd
 
             const accountExist = await Accounts.findOne( {_id : parentId });
 
@@ -56,6 +56,7 @@ class UserStockController{
                 throw new Error("Conta não encontrada na base de dados");
 
             await UpdateAccount(req, accountExist, stockTotalValue, next, validStock);
+
             await UpdateStockRequests(validStock, stockQtd, next);
 
             return res.json("Valor " + `${ stockTotalValue } ` + " retirado da conta corrente para o investimento " + `${ validStock.stockDisplayName } ` + ", efetuado com sucesso !");
@@ -95,6 +96,7 @@ class UserStockController{
                 data.push({
                     id: x.parentStockId,
                     stockDisplayName: x.user_stock[0] ? x.user_stock[0].stockDisplayName : null,
+                    numberOfStocks: x.NumberOfStocks,
                     totalInvestment: x.totalValue
                 })
             })
@@ -109,7 +111,7 @@ class UserStockController{
 
 async function AddExpense(req, stockTotalValue, account, next, stock){
 
-        const { parentId, data} = req.body;
+        const { parentId } = req.body;
 
         const accountExist = await Accounts.findOne( {_id : parentId });
     
@@ -122,7 +124,7 @@ async function AddExpense(req, stockTotalValue, account, next, stock){
                 parentId,
                 parentName : account.parentName,
                 valor: expenseValue,
-                data : data,
+                data : DateTime.Now(),
                 categoria : "Investimentos",
                 descricao : stock.stockName
             });
@@ -135,21 +137,19 @@ async function UpdateAccount(req, account, stockTotalValue, next, stock){
 
         account.saldo -= stockTotalValue;
     
-        const AccountUpdate =  await Accounts.findByIdAndUpdate(account._id, account, {
-                new: true,
-            });
 
         const newAccount = {
             ...account,
             parentName: account.filterName
         }
 
-        if(AccountUpdate)
-        {
-            await AddExpense(req, stockTotalValue, newAccount, next, stock);  
-            await AddClientStocks(next, stockTotalValue, req, account._id)
-        }
-           
+        await AddClientStocks(next, stockTotalValue, req);
+
+        await AddExpense(req, stockTotalValue, newAccount, next, stock);  
+    
+        await Accounts.findByIdAndUpdate(account._id, account, {
+            new: true,
+        });     
 }
 
 async function UpdateGoal(req, next, stockTotalValue, stock){
@@ -161,45 +161,60 @@ async function UpdateGoal(req, next, stockTotalValue, stock){
         var userAccount = await Accounts.findOne({ _id : parentId });
 
         if(userAccount.id !== goal.parentId)
-            throw new Error('Nenhuma meta chamada ' + `${goal.nameGoal } ` + ', foi encontrada para o usuário' + `${userAccount.name }`);
+            throw new Error('Nenhuma meta chamada ' + `${goal.nameGoal} ` + ' , foi encontrada para o usuário' + `${userAccount.name }`);
     
         if(goal.currentGoalValue < stockTotalValue)
-            throw new Error('O valor contido na meta ' + `${goal.nameGoal } ` + 'não é sufuciente para efetuar a transação !');
+            throw new Error('O valor contido na meta ' + `${goal.nameGoal} ` + ' não é sufuciente para efetuar a transação !');
     
         goal.currentGoalValue -= stockTotalValue;
     
-        const goalUpdate =  await goals.findByIdAndUpdate(goal._id, goal, {
+        await AddClientStocks(next, stockTotalValue, req);
+
+        await AddExpense(req, stockTotalValue, goal, next, stock);
+
+        await goals.findByIdAndUpdate(goal._id, goal, {
             new: true,
         });
 
-        if(goalUpdate)
-        {
-            await AddExpense(req, stockTotalValue, goal, next, stock);
-            await AddClientStocks(next, stockTotalValue, req, goal.parentId);
-            return goal;
-        }
+        return goal;
+      
 }
 
-async function AddClientStocks(next, stockTotalValue, req, idCLiente){
+async function AddClientStocks(next, stockTotalValue, req){
     
-    const{ stockQtd, stockId } = req.body;
+    const{ stockQtd, stockId, parentId } = req.body;
 
+    const stockUser = await clientStocks.findOne( { parentStockIdObject : stockId, parentClientId: parentId } );
+
+    if(stockUser)
+    {
+        stockUser.NumberOfStocks += stockQtd;
+        stockUser.totalValue += stockTotalValue;
+
+        stockUser.totalValue = (Math.round( stockUser.totalValue  * 100) / 100);
+
+        await clientStocks.findByIdAndUpdate(stockUser._id, stockUser, {
+            new: true,
+        });
+    }
+
+    else
+    {
         await clientStocks.create({
-            parentClientId: idCLiente,
+            parentClientId: parentId,
             parentStockIdObject: stockId,
             parentStockId: stockId,
             NumberOfStocks: stockQtd,
             totalValue: stockTotalValue,
         });
-
+    }
 }
 
 async function UpdateStockRequests(validStock, stockQtd, next){
-  
 
         validStock.numberOfRequests += stockQtd;
 
-        var s = await stock.findByIdAndUpdate(validStock._id, validStock, {
+        await stock.findByIdAndUpdate(validStock._id, validStock, {
             new : true,
         });
 

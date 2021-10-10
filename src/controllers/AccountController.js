@@ -28,7 +28,7 @@ class AccountController{
         try{
             const filterName = req.params.filterName;
 
-            const filterNameExists = await Accounts.find( { filterName } );
+            const filterNameExists = await Accounts.find( { filterName: filterName.toLowerCase() } );
 
             if(filterNameExists.length === 0)
                 throw new Error("Usuário " +  `${filterName}` +  " inexistente favor verificar o dado digitado ! ");
@@ -68,7 +68,10 @@ class AccountController{
             if(!validEmail)
                 throw new Error("E-mail informado está fora do padrão ! Tente novamente");
 
-            let filterName = `${"@"}${userFilter}`;
+            if(!StringFormat.ValidUser(userFilter))
+                throw new Error("O usuário não pode conter caracteres especiais !");
+
+            let filterName = `${"@"}${userFilter.toLowerCase()}`;
 
             const password = await bcrypt.hash(senha, 10);
 

@@ -1,5 +1,8 @@
 import { db } from '../../databaseConnect.js';
 import ValidConta from '../utils/ValidConta.js';
+import mailer from '../modules/mailer.js';
+import { format } from 'date-fns';
+import StringFormat from '../utils/StringFormat.js';
 
 const expenses = db.expenses;
 const Accounts = db.accounts;
@@ -9,6 +12,10 @@ class BalancerController{
         try{
 
             const {conta, contaDestino, valor, data} = req.body;
+
+            const dateFormat = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+
+            const formatValue = valor.toLocaleString('pt-br', {minimumFractionDigits: 2});
 
             if(conta === contaDestino)
                 throw new Error("O usuário inicial não pode ser o mesmo de destino, favor verificar o dado digitado !");
@@ -21,13 +28,16 @@ class BalancerController{
             if(tipoExpense === -1 || tipoExpense === 0)
                 throw new Error("O valor não pode ser negativo ou zero !");
 
-            let valorNegativo = valor * -1;
+            let valorNegativo = valor * -1;    
             contaInicial.saldo -= valor;
             if(contaInicial.saldo < 0){
                 throw new Error("Saldo insuficiente para completar a operação !");
             }
 
             contaDestinoo.saldo += valor;
+
+            contaInicial.saldo = (Math.round(contaInicial.saldo  * 100) / 100);
+            contaDestinoo.saldo = (Math.round(contaDestinoo.saldo  * 100) / 100);
 
             contaInicial = new Accounts(contaInicial);
             contaInicial.save();
@@ -40,7 +50,7 @@ class BalancerController{
                 parentId : contaInicial._id,
                 parentName : contaInicial.filterName,
                 valor : valorNegativo,
-                data : data,
+                data : dateFormat,
                 categoria : "Receita",
                 descricao: "Transferência",
                 targetUser: contaDestinoo.filterName
@@ -51,13 +61,28 @@ class BalancerController{
                 parentId : contaDestinoo._id,
                 parentName : contaDestinoo.filterName,
                 valor : valor,
-                data : data,
+                data : dateFormat,
                 categoria : "Receita",
                 descricao: "Transferência",
                 targetUser : contaInicial.filterName
             });
 
-            return res.json("Transferência efetuada com sucesso para " + `${contaDestinoo.name } ` + "seu saldo atual é " + `${contaInicial.saldo}`);
+    // Somente descomentar para a apresentação do projeto
+             await mailer.sendMail({
+                to: contaInicial.email,
+                from: "no-reply@victornfb.com",
+                subject: "QuickBank - Transferência Realizada Com Sucesso",
+                template: "auth/transfer",
+                context: { user: contaInicial.filterName,
+                    destinyUser: contaDestinoo.filterName,
+                    name: contaDestinoo.name,
+                    document: StringFormat.ReplaceCharacter(4,10,StringFormat.FormatCpf(contaDestinoo.cpf), '*'),
+                    value: formatValue },
+            }) 
+
+            const saldoFormatado = contaInicial.saldo.toLocaleString('pt-br', {minimumFractionDigits: 2})
+
+            return res.json("Transferência efetuada com sucesso para " + `${contaDestinoo.name } ` + "seu saldo atual é R$ " + `${saldoFormatado}`);
 
         }catch(error){
             next(error);

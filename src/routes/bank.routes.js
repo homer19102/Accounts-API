@@ -20,6 +20,7 @@ import AverageSellingPriceController from '../controllers/AverageSellingPriceCon
 
 import PasswordController from '../controllers/PasswordController.js';
 
+import RefreshTokenController from '../controllers/RefreshTokenController.js';
 
 const { Router } = express;
 
@@ -41,7 +42,7 @@ const passwordRouter = Router();
 
 const loginRouter = Router();
 
-
+const refreshTokenRouter = Router();
 
 //Accounts Router
 accountsRouter.get('/', AccountController.getAccount);
@@ -86,6 +87,10 @@ averageSellingPriceRouter.post('/PostAverageSellingPrice', AverageSellingPriceCo
 
 //Password controller
 passwordRouter.post('/ResetPassword', PasswordController.ResetPassword);
+passwordRouter.post('/NewPassword', PasswordController.NewPassword);
+
+//Refresh Token
+refreshTokenRouter.post('/NewToken', RefreshTokenController.NewToken);
 
 //Login Router
 loginRouter.post('/', LoginController.Login);
@@ -95,6 +100,7 @@ export {accountsRouter as accountsRouter,
      expensesRouter as expensesRouter,
      goalsRouter as goalsRouter,
      stockRouter as stockRouter,
+     refreshTokenRouter as refreshTokenRouter,
      loginRouter as loginRouter,
      passwordRouter as passwordRouter,
      propertyRouter as propertyRouter,
