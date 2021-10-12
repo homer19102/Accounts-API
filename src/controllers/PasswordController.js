@@ -41,7 +41,7 @@ class PasswordController{
             from: "no-reply@victornfb.com",
             subject: "Redefinição De Senha QuickBank",
             template: "auth/template",
-            context: { userFilterName: userExists.filterName, token: token },
+            context: { userFilterName: userExists.filterName, token: token, link: process.env.LINK },
         })
 
         return res.json({ok: "true"});

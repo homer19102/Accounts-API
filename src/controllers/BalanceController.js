@@ -77,7 +77,9 @@ class BalancerController{
                     destinyUser: contaDestinoo.filterName,
                     name: contaDestinoo.name,
                     document: StringFormat.ReplaceCharacter(4,10,StringFormat.FormatCpf(contaDestinoo.cpf), '*'),
-                    value: formatValue },
+                    value: formatValue,
+                    link: process.env.LINK
+                    },
             }) 
 
             const saldoFormatado = contaInicial.saldo.toLocaleString('pt-br', {minimumFractionDigits: 2})
