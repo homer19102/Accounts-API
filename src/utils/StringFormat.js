@@ -25,7 +25,7 @@ class StringFormat{
     }
 
     ValidUser(text){
-        const format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+        const format = /[!@#$%^&*()+\-=\[\]{};':"\\|,<>\/?]+/;
 
         if(format.test(text))
             return false;
