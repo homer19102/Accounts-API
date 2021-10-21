@@ -14,10 +14,7 @@ export default (req, res, next) => {
     if(!parts.length === 2)
         return res.status(401).send({ error: 'Token no formato incorreto !'});
 
-    const [ scheme, token] = parts;
-
-   /*  if(!/^Bearer$^/i.test(scheme))
-        return res.status(401).send({ error: 'Token no formato incorreto !'}); */
+    const [ token] = parts;
 
     jwt.verify(token, process.env.SECRET, (err, decoded) => {
         if(err) return res.status(401).send({ error: 'Token inválido !'});
