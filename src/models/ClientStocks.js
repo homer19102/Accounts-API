@@ -22,6 +22,14 @@ export default(mongoose) => {
         totalValue:{
             type: Number,
             required: true
+        },
+        buy_date: {
+            type: Date,
+            required: true
+        },
+        sell_date: {
+            type: Date,
+            required: true
         }
     })
 

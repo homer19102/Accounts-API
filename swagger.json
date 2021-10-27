@@ -901,9 +901,11 @@
                     "numberOfStocks":{
                         "type": "number"
                     },
-                    "totalInvestment":{
-                        "type": "number",
-                        "multipleOf": 0.01
+                    "buy_date":{
+                        "type": "string"
+                    },
+                    "sell_date":{
+                        "type": "string"
                     }
                 }
             },

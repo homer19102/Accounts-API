@@ -97,7 +97,9 @@ class UserStockController{
                     id: x.parentStockId,
                     stockDisplayName: x.user_stock[0] ? x.user_stock[0].stockDisplayName : null,
                     numberOfStocks: x.NumberOfStocks,
-                    totalInvestment: x.totalValue
+                    totalInvestment: x.totalValue,
+                    buy_date: DateTime.FormatDate(x.buy_date),
+                    sell_date: DateTime.FormatDate(x.sell_date)
                 })
             })
 
@@ -200,12 +202,18 @@ async function AddClientStocks(next, stockTotalValue, req){
 
     else
     {
+        const dateNow = DateTime.Now();
+
+        const addDay = DateTime.AddDays(365);
+
         await clientStocks.create({
             parentClientId: parentId,
             parentStockIdObject: stockId,
             parentStockId: stockId,
             NumberOfStocks: stockQtd,
             totalValue: stockTotalValue,
+            buy_date : DateTime.Now(),
+            sell_date : DateTime.AddDays(365)
         });
     }
 }
