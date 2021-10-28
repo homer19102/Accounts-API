@@ -78,7 +78,27 @@ class BalancerController{
                     name: contaDestinoo.name,
                     document: StringFormat.ReplaceCharacter(4,10,StringFormat.FormatCpf(contaDestinoo.cpf), '*'),
                     value: formatValue,
-                    link: process.env.LINK
+                    link: process.env.LINK,
+                    textOne: 'Sua transferência de',
+                    textTwo: 'para',
+                    textThree: 'foi realizada com sucesso.'
+                    },
+            }) 
+
+            await mailer.sendMail({
+                to: contaDestinoo.email,
+                from: "no-reply@victornfb.com",
+                subject: "QuickBank - Transferência Recebida",
+                template: "auth/transfer",
+                context: { user: contaDestinoo.filterName,
+                    destinyUser: contaInicial.filterName,
+                    name: contaInicial.name,
+                    document: StringFormat.ReplaceCharacter(4,10,StringFormat.FormatCpf(contaInicial.cpf), '*'),
+                    value: formatValue,
+                    link: process.env.LINK,
+                    textOne: 'Você recebeu uma transferência de ',
+                    textTwo: 'de',
+                    textThree: ' '
                     },
             }) 
 
