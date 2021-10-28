@@ -32,6 +32,11 @@ class GoalsController {
 
             let currentGoalValue = 0;
 
+            const value = Math.sign(valueGoal);
+
+            if(value === -1 || value === 0)
+                throw new Error("O valor da meta não pode ser negativo !");
+
             const userExists = await Accounts.findOne( {_id : parentId });
 
             if(userExists === null)
