@@ -79,7 +79,7 @@ class BalancerController{
                     document: StringFormat.ReplaceCharacter(4,10,StringFormat.FormatCpf(contaDestinoo.cpf), '*'),
                     value: formatValue,
                     link: process.env.LINK,
-                    textOne: 'Sua transferência de',
+                    textOne: 'Sua transferência de ',
                     textTwo: 'para',
                     textThree: 'foi realizada com sucesso.'
                     },
